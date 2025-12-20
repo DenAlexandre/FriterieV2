@@ -16,9 +16,9 @@
 
     public class FriterieStore(IConfiguration configuration, ILogger<IFriterieStore> logger) : IFriterieStore
     {
-        private const string FN_GET_COUNT_ALIMENTS_BDD = "select * from Friterie.fn_get_count_aliments";
-        private const string FN_GET_ALIMENTS_BDD = "select * from Friterie.fn_get_aliments";
-        private const string FN_GET_GROUPE_ALIMENTS_BDD = "select * from Friterie.fn_get_groupes_aliments";
+        private const string FN_GET_COUNT_ALIMENTS_BDD = "select * from friterie.fn_get_count_aliments";
+        private const string FN_GET_ALIMENTS_BDD = "select * from friterie.fn_get_aliments";
+        private const string FN_GET_GROUPE_ALIMENTS_BDD = "select * from friterie.fn_get_groupes_aliments";
         
 
         #region variables
