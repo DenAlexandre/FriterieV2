@@ -1,4 +1,4 @@
-﻿namespace Friterie.Server.Models
+﻿namespace Friterie.API.Models
 {
     
     public interface ISelectable

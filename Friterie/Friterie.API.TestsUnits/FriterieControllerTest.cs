@@ -1,13 +1,15 @@
+using Friterie.API.Models;
+using Friterie.API.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Friterie.Models;
-using Friterie.Server.Stores;
+ 
+
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
 
-namespace Friterie.Server.TestsUnits
+namespace Friterie.API.TestsUnits
 {
     public class FriterieControllerTest
     {

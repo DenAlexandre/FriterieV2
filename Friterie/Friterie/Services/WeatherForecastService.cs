@@ -1,4 +1,7 @@
-using Friterie.Models;
+
+
+using Friterie.API.Models;
+
 
 namespace Friterie.Services
 {

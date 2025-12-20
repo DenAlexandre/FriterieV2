@@ -1,5 +1,6 @@
 ﻿@page "/fetchdata"
-@using Friterie.Models
+
+@using Friterie.API.Models
 @using Friterie.Services
 @* Only the users with the role "Administrator" are authorized to access this component *@
 @attribute [Authorize(Roles = "Administrator")]

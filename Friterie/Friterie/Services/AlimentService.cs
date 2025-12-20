@@ -1,5 +1,6 @@
+using Friterie.API.Models;
 using Newtonsoft.Json;
-using Friterie.Models;
+ 
 
 namespace Friterie.Services
 {

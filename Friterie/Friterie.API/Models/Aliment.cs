@@ -1,6 +1,7 @@
-﻿using Friterie.Server.Models;
+﻿using Friterie.API.Models;
+ 
 
-namespace Friterie.Models
+namespace Friterie.API.Models
 {
     public class Aliment : ISelectable
     {

@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Friterie.API.Models;
+using Friterie.API.Stores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Npgsql;
-using Friterie.Models;
-using Friterie.Server.Stores;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,6 +20,8 @@ public class AlimentsController : ControllerBase
     private const string GET_COUNT_ALIMENTS_BDD = "/FriterieService/BDD/GetCountAliments";
     private const string GET_ALIMENTS_BDD = "/FriterieService/BDD/GetAliments";
     private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieService/BDD/GetGroupesAliments";
+
+    private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
 
     public AlimentsController(IConfiguration configuration, IFriterieStore FriterieStore)
     {
@@ -74,5 +75,6 @@ public class AlimentsController : ControllerBase
     {
         return store is null ? throw new ArgumentNullException(nameof(store)) : await store.GetGroupesAliments();
     }
+
 
 }

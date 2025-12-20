@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Friterie.Server\Friterie.Server.csproj" />
+    <ProjectReference Include="..\Friterie.API\Friterie.API.csproj" />
+    <ProjectReference Include="..\Friterie.Server\Friterie.API.csproj" />
   </ItemGroup>
 
   <ItemGroup>

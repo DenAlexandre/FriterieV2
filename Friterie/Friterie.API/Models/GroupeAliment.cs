@@ -1,4 +1,4 @@
-﻿namespace Friterie.Models
+﻿namespace Friterie.API.Models
 {
     public class GroupeAliment
     {

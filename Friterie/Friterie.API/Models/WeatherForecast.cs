@@ -1,6 +1,6 @@
 using System;
 
-namespace Friterie.Models
+namespace Friterie.API.Models
 {
     public class WeatherForecast
     {

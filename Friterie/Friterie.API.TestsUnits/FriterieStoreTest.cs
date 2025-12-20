@@ -1,10 +1,12 @@
+using Friterie.API.Models;
+using Friterie.API.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Friterie.Models;
-using Friterie.Server.Stores;
+ 
 
 
-namespace Friterie.Server.TestsUnits
+
+namespace Friterie.API.TestsUnits
 {
     public class FriterieStoreTest
     {
@@ -42,9 +44,22 @@ namespace Friterie.Server.TestsUnits
         {
             List<Aliment> aliments = new List<Aliment>();
 
-            aliments = await FriterieStore.GetAliments(0, 1000, 1000);
+            aliments = await FriterieStore.GetAliments(0, 1000, 0);
 
             Assert.NotNull(aliments);
+
+
+        }
+
+
+        [Fact]
+        public async Task GetArticlesTest()
+        {
+            List<Article> articles = new List<Article>();
+
+            articles = await FriterieStore.GetArticles(1, 1000, 0);
+
+            Assert.NotNull(articles);
 
 
         }
