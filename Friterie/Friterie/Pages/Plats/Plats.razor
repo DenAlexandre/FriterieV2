@@ -1,0 +1,115 @@
+@page "/plats"
+
+<PageTitle>Plats</PageTitle>
+
+<h1>Menu du restaurant</h1>
+
+<div class="maitre-detail">
+    <!-- SECTION MAÎTRE : sélection de catégorie -->
+    <div class="maitre">
+        <h3>Catégories</h3>
+        <ul class="categories">
+            @foreach (var cat in categories)
+            {
+                <li class="@(cat == categorieSelectionnee ? "selected" : "")"
+                    @onclick="@(() => ChangerCategorie(cat))">
+                    @cat
+                </li>
+            }
+        </ul>
+    </div>
+
+    <!-- SECTION LISTE : plats selon la catégorie -->
+    <div class="liste">
+        <h3>@categorieSelectionnee</h3>
+
+        @if (platsFiltres == null)
+        {
+            <p><em>Chargement...</em></p>
+        }
+        else if (platsFiltres.Count == 0)
+        {
+            <p><em>Aucun plat dans cette catégorie.</em></p>
+        }
+        else
+        {
+            <ul class="plats">
+                @foreach (var plat in platsFiltres)
+                {
+                    <li class="plat-item @(plat == platSelectionne ? "selected" : "")"
+                        @onclick="@(() => SelectionnerPlat(plat))">
+                        <img src="@plat.ImageUrl" alt="@plat.Nom" />
+                        <span>@plat.Nom</span>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+
+    <!-- SECTION DÉTAIL -->
+    <div class="detail">
+        <h3>Détail</h3>
+        @if (platSelectionne != null)
+        {
+            <img src="@platSelectionne.ImageUrl" alt="@platSelectionne.Nom" class="image-detail" />
+            <h4>@platSelectionne.Nom</h4>
+            <p>@platSelectionne.Description</p>
+            <p><b>Prix :</b> @platSelectionne.Prix.ToString("0.00 €")</p>
+        }
+        else
+        {
+            <p><em>Sélectionnez un plat pour voir les détails.</em></p>
+        }
+    </div>
+</div>
+
+@code {
+    private List<string> categories = new() { "Entrée", "Plat", "Dessert" };
+    private string categorieSelectionnee = "Entrée";
+
+    private List<Plat> tousLesPlats = new();
+    private List<Plat> platsFiltres = new();
+    private Plat? platSelectionne;
+
+    protected override void OnInitialized()
+    {
+        // Données d'exemple
+        tousLesPlats = new()
+        {
+            new Plat { Nom="Salade César", Categorie="Entrée", Description="Salade, poulet, parmesan, croûtons", Prix=7.5, ImageUrl="images/salade.jpg" },
+            new Plat { Nom="Soupe du jour", Categorie="Entrée", Description="Soupe maison préparée chaque matin", Prix=5.0, ImageUrl="images/soupe.jpg" },
+            new Plat { Nom="Steak frites", Categorie="Plat", Description="Pièce de boeuf grillée, frites maison", Prix=15.9, ImageUrl="images/steak.jpg" },
+            new Plat { Nom="Pâtes carbonara", Categorie="Plat", Description="Spaghetti, lardons, crème, œuf, parmesan", Prix=12.5, ImageUrl="images/pates.jpg" },
+            new Plat { Nom="Mousse au chocolat", Categorie="Dessert", Description="Mousse légère au chocolat noir", Prix=5.8, ImageUrl="images/mousse.jpg" },
+            new Plat { Nom="Tarte au citron", Categorie="Dessert", Description="Crème citron et meringue fondante", Prix=6.2, ImageUrl="images/tarte.jpg" }
+        };
+
+        FiltrerPlats();
+    }
+
+    private void ChangerCategorie(string categorie)
+    {
+        categorieSelectionnee = categorie;
+        platSelectionne = null;
+        FiltrerPlats();
+    }
+
+    private void FiltrerPlats()
+    {
+        platsFiltres = tousLesPlats.Where(p => p.Categorie == categorieSelectionnee).ToList();
+    }
+
+    private void SelectionnerPlat(Plat plat)
+    {
+        platSelectionne = plat;
+    }
+
+    public class Plat
+    {
+        public string Nom { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string Categorie { get; set; } = "";
+        public double Prix { get; set; }
+        public string ImageUrl { get; set; } = "";
+    }
+}

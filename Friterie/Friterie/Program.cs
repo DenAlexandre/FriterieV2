@@ -1,0 +1,102 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.Identity.Web;
+using Microsoft.OpenApi.Models;
+using MudBlazor.Services;
+using Friterie.Authentication;
+using Friterie.Services;
+using Serilog;
+
+
+
+var builder = WebApplication.CreateBuilder(args);
+
+
+// Add services to the container.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+
+// Ajouter l'authentification avec Microsoft Entra ID
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services.AddAuthorization();
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+
+builder.Services.AddScoped<ProtectedSessionStorage>();
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+//builder.Services.AddSingleton<UserServiceView>();
+//builder.Services.AddSingleton<UserAccountService>();
+builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddSingleton<AlimentService>();
+builder.Services.AddHostedService(provider => provider.GetRequiredService<AlimentService>());
+
+builder.Services.AddMudServices();
+
+// Enregistrer IHttpContextAccessor pour l'accès au contexte HTTP
+builder.Services.AddHttpContextAccessor();
+builder.Services
+    .AddBlazorise(options =>
+    {
+        options.Immediate = true;
+    })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
+
+// Register Fluent UI services
+builder.Services.AddFluentUIComponents();
+
+
+var app = builder.Build();
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error");
+
+}
+
+// Middleware d'authentification et d'autorisation
+app.UseAuthentication();
+app.UseAuthorization();
+
+//Pour remettre l'authentification Azure, il faut faire la redirection dans le MainLayout.razor
+// Endpoint pour se connecter
+app.MapGet("/authentication/login", async (HttpContext context) =>
+{
+    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = "/login"
+    });
+});
+
+// Endpoint pour se déconnecter
+app.MapGet("/authentication/logout", async (HttpContext context) =>
+{
+    await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+    {
+        RedirectUri = "/"
+    });
+});
+
+app.MapBlazorHub();
+app.MapFallbackToPage("/_Host");
+
+
+
+
+
+
+app.Run();

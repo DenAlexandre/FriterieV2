@@ -1,0 +1,15 @@
+﻿.mud-table-cell, .mud-table-header-cell {
+    border: 1px solid rgba(0,0,0,0.12); /* couleur grise claire comme Material */
+}
+
+.mud-table {
+    border-collapse: collapse; /* pour que les bordures se touchent */
+}
+
+.fluent-data-grid-row:has([row-selected]) > td {
+    background-color: skyblue
+}
+
+th:first-child, td:first-child {
+    display: none;
+}

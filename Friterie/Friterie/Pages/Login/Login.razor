@@ -1,0 +1,65 @@
+﻿@page "/login"
+@using Friterie.Authentication
+@inject IJSRuntime js
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+
+
+
+<div class="row">
+    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
+        <div class="mb-3 text-center">
+            <h3>Login</h3>
+        </div>
+        <div class="mb-3">
+            <label>Username</label>
+            <input @bind="model.UserName" class="form-control" placeholder="Username" />
+        </div>
+        <div class="mb-3">
+            <label>Password</label>
+            <input @bind="model.Password" type="password" class="form-control" placeholder="Password" />
+        </div>
+        <div class="mb-3 d-grid gap-2">
+            <button @onclick="Authenticate" class="btn btn-primary">Login</button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private class Model
+    {
+        public string UserName { get; set; } = "admin";
+        public string Password { get; set; } = "password";
+        public string Role { get; set; } = "Administrator";
+    }
+    private Model model = new Model(); 
+
+
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationState { get; set; }
+
+    private async Task Authenticate()
+    {
+        var authState = await authenticationState;
+
+
+        //TODO Remettre un appel en base
+        //var userSDR = await userAccountService.GetUserByLogin(model.UserName);
+        // if (userAccount == null || userAccount.Password != model.Password)
+        if (model == null || "password" != model.Password)
+        {
+            await js.InvokeVoidAsync("alert", "Invalid user Name or password");
+            return;
+        }
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            {
+                UserName = model.UserName,
+                Role = model.Role,
+            });
+        // true, indicates that the navigation should be done with a full page refresh.
+        navManager.NavigateTo("/", true);
+    }
+}

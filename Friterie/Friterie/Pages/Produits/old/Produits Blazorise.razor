@@ -1,0 +1,49 @@
+﻿@page "/produits_blazorise"
+@using System.Globalization
+@using Blazorise
+@using Blazorise.DataGrid
+@attribute [Authorize(Roles = "Administrator")]
+
+<h3 class="mb-4">📦 Liste des produits (Blazorise DataGrid)</h3>
+
+<DataGrid TItem="Produit"
+          Data="@ProduitsList"
+          Pageable="true"
+          PageSize="5"
+          Filterable="true"
+          Sortable="true"
+          Responsive="true"
+          ShowPager="true"
+          Bordered="true"
+          Striped="true"
+          Hoverable="true">
+
+    <DataGridColumns>
+        <DataGridColumn TItem="Produit" Field="@nameof(Produit.Nom)" Caption="Nom" />
+        <DataGridColumn TItem="Produit" Field="@nameof(Produit.Categorie)" Caption="Catégorie" />
+        <DataGridColumn TItem="Produit" Field="@nameof(Produit.Prix)" Caption="Prix (€)" 
+                        TextAlignment="TextAlignment.End"
+                        DisplayFormat="{0:C}" />
+    </DataGridColumns>
+</DataGrid>
+
+@code {
+    private List<Produit> ProduitsList = new()
+    {
+        new Produit{ Nom="Pomme", Categorie="Fruit", Prix=1.20m },
+        new Produit{ Nom="Banane", Categorie="Fruit", Prix=0.80m },
+        new Produit{ Nom="Tomate", Categorie="Légume", Prix=2.50m },
+        new Produit{ Nom="Carotte", Categorie="Légume", Prix=1.00m },
+        new Produit{ Nom="Steak", Categorie="Viande", Prix=8.90m },
+        new Produit{ Nom="Poulet", Categorie="Viande", Prix=6.50m },
+        new Produit{ Nom="Orange", Categorie="Fruit", Prix=1.10m },
+        new Produit{ Nom="Courgette", Categorie="Légume", Prix=2.00m }
+    };
+
+    public class Produit
+    {
+        public string Nom { get; set; } = "";
+        public string Categorie { get; set; } = "";
+        public decimal Prix { get; set; }
+    }
+}
