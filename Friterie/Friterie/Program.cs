@@ -65,7 +65,6 @@ app.UseRouting();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-
 }
 
 // Middleware d'authentification et d'autorisation
@@ -93,10 +92,4 @@ app.MapGet("/authentication/logout", async (HttpContext context) =>
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
-
-
-
-
-
 app.Run();

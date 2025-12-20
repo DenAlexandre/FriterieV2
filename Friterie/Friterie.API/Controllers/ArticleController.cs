@@ -21,6 +21,15 @@ public class ArticleController : ControllerBase
 
     private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
 
+
+    public ArticleController(IConfiguration configuration, IFriterieStore FriterieStore)
+    {
+        _configuration = configuration;
+        _FriterieStore = FriterieStore;
+    }
+
+
+
     [HttpGet]
     [Route(GET_ARTICLES_BDD)]
     [Produces("application/json")]

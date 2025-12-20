@@ -23,9 +23,7 @@ app.UseRouting();
 // Active Swagger en dev
 if (app.Environment.IsDevelopment())
 {
-
     app.UseExceptionHandler("/Error");
-    //https://localhost:7031/swagger/index.html
 }
 app.UseSwagger();
 app.UseSwaggerUI();
