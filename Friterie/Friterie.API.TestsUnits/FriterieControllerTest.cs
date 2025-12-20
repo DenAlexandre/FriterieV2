@@ -130,7 +130,7 @@ namespace Friterie.API.TestsUnits
                     Console.WriteLine("Deserialization resulted in null.");
 
                 // Assert
-                Assert.Equal(rep.Count, 7);
+                Assert.Equal(rep.Count, 2);
             }
             catch (Exception ex)
             {

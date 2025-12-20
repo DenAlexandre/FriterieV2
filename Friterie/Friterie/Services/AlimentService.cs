@@ -12,6 +12,9 @@ namespace Friterie.Services
         private const string GET_ALIMENTS_BDD = "/FriterieService/BDD/GetAliments";
         private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieService/BDD/GetGroupesAliments";
 
+
+        private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
+
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
         private readonly ILogger _logger = logger;
 
@@ -123,7 +126,41 @@ namespace Friterie.Services
         }
 
 
+        public async Task<List<Article>> GetArticlesAsync(int type, int limit, int offset)
+        {
+            List<Article> list = new List<Article>();
 
+            try
+            {
+                // Construire l'URL avec le paramètre idRame
+                var requestUri = $"{Friterie_SERVICE_URI}{GET_ARTICLES_BDD}";
+                requestUri += $"?in_type={Uri.EscapeDataString(type.ToString())}";
+                requestUri += $"&in_limit={Uri.EscapeDataString(limit.ToString())}";
+                requestUri += $"&in_offset={Uri.EscapeDataString(offset.ToString())}";
+                // Créer le client HTTP
+                HttpClient client = _httpClientFactory.CreateClient();
+                // Lire la réponse brute en tant que chaîne 
+                var jsonResponse = await client.GetStringAsync(requestUri);
+                // Désérialiser le JSON en un objet RameInformation
+                var obj = JsonConvert.DeserializeObject<List<Article>>(jsonResponse);
+                if (obj == null)
+                {
+                    Console.WriteLine("Deserialization resulted in null.");
+                }
+                list = obj;
+            }
+            catch (HttpRequestException httpRE)
+            {
+                if (httpRE.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    throw httpRE;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex);
+                throw ex;
+            }
+            return list;
+        }
 
 
 

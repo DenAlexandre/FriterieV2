@@ -25,6 +25,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

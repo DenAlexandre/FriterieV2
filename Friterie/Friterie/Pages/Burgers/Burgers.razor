@@ -1,8 +1,12 @@
 @page "/burgers"
+@using Friterie.API.Models
+@using Friterie.Services
+@inject AlimentService AlimentServiceView
+
 
 <PageTitle>Plats</PageTitle>
 
-<h1>Menu du restaurant</h1>
+<h1>Choix des Burgers</h1>
 
 <div class="maitre-detail">
 
@@ -11,11 +15,11 @@
 
             <h3>Burgers</h3>
             <ul class="categories">
-                @foreach (var burger_item in burgers)
+            @foreach (var burger_item in _burgers)
                 {
-                    <li class="@(burger_item == categorieSelectionnee ? "selected" : "")"
+                <li class="@(burger_item.TArticleId == _articleSelectionne?.TArticleId ? "selected" : "")"
                         @onclick="@(() => ChangerBurger(burger_item))">
-                        @burger_item
+                        @burger_item.TArticleNom
                     </li>
                 }
             </ul>
@@ -25,12 +29,12 @@
     <!-- SECTION DÉTAIL -->
     <div class="detail">
         <h3>Détail</h3>
-        @if (platSelectionne != null)
+        @if (_articleSelectionne != null)
         {
-            <img src="@platSelectionne.ImageUrl" alt="@platSelectionne.Nom" class="image-detail" />
-            <h4>@platSelectionne.Nom</h4>
-            <p>@platSelectionne.Description</p>
-            <p><b>Prix :</b> @platSelectionne.Prix.ToString("0.00 €")</p>
+            <img src="@_articleSelectionne.TArticleURLIMg" alt="@_articleSelectionne.TArticleNom" class="image-detail" />
+            <h4>@_articleSelectionne.TArticleNom</h4>
+            <p>@_articleSelectionne.TArticleDesc</p>
+            <p><b>Prix :</b> @_articleSelectionne.TArticlePrix?.ToString("0.00 €")</p>
         }
         else
         {
@@ -40,52 +44,41 @@
 </div>
 
 @code {
-    private List<string> burgers = new() ;
-    private string categorieSelectionnee = "Entrée";
 
-    private List<Plat> tousLesPlats = new();
-    private List<Plat> platsFiltres = new();
-    private Plat? platSelectionne;
+    const int CATEGORIE = 1;
 
-    protected override void OnInitialized()
+    private List<Article> _burgers = new();
+    private Article? _articleSelectionne;
+
+
+
+    protected override async Task OnInitializedAsync()
     {
-        // Données d'exemple
-        tousLesPlats = new()
-        {
-            new Plat { Nom="Salade César", Categorie="Entrée", Description="Salade, poulet, parmesan, croûtons", Prix=7.5, ImageUrl="images/salade.jpg" },
-            new Plat { Nom="Soupe du jour", Categorie="Entrée", Description="Soupe maison préparée chaque matin", Prix=5.0, ImageUrl="images/soupe.jpg" },
-            new Plat { Nom="Steak frites", Categorie="Plat", Description="Pièce de boeuf grillée, frites maison", Prix=15.9, ImageUrl="images/steak.jpg" },
-            new Plat { Nom="Pâtes carbonara", Categorie="Plat", Description="Spaghetti, lardons, crème, œuf, parmesan", Prix=12.5, ImageUrl="images/pates.jpg" },
-            new Plat { Nom="Mousse au chocolat", Categorie="Dessert", Description="Mousse légère au chocolat noir", Prix=5.8, ImageUrl="images/mousse.jpg" },
-            new Plat { Nom="Tarte au citron", Categorie="Dessert", Description="Crème citron et meringue fondante", Prix=6.2, ImageUrl="images/tarte.jpg" }
-        };
+        _burgers = await AlimentServiceView.GetArticlesAsync(CATEGORIE, 1000, 0);
 
-        FiltrerPlats();
+        //FiltrerCategorie();
     }
 
-    private void ChangerBurger(string categorie)
+    protected override void OnAfterRender(bool firstRender)
     {
-        categorieSelectionnee = categorie;
-        platSelectionne = null;
-        FiltrerPlats();
+        if (_articleSelectionne == null)
+            _articleSelectionne = _burgers.FirstOrDefault();
+
+        base.OnAfterRender(firstRender);
     }
 
-    private void FiltrerPlats()
+
+    private void ChangerBurger(Article article)
     {
-        platsFiltres = tousLesPlats.Where(p => p.Categorie == categorieSelectionnee).ToList();
+        // categorieSelectionnee = categorie;
+        _articleSelectionne = _burgers.FirstOrDefault(x=>x.TArticleId == article.TArticleId);
+        // FiltrerCategorie();
     }
 
-    private void SelectionnerPlat(Plat plat)
+    private void SelectionnerBurger(Article article)
     {
-        platSelectionne = plat;
+        _articleSelectionne = article;
     }
 
-    public class Plat
-    {
-        public string Nom { get; set; } = "";
-        public string Description { get; set; } = "";
-        public string Categorie { get; set; } = "";
-        public double Prix { get; set; }
-        public string ImageUrl { get; set; } = "";
-    }
+
 }

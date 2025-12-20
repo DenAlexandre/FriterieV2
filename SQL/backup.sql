@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
 -- Dumped by pg_dump version 17.0
 
--- Started on 2025-12-20 14:57:25
+-- Started on 2025-12-20 16:38:13
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -3556,8 +3556,8 @@ INSERT INTO friterie.aliments VALUES (11, 1104, 0, 'aliments infantiles', 'cér�
 
 INSERT INTO friterie.articles VALUES (1000, 'fricadelle', 'saucisse ', 4, 'images/salade.jpg', 2);
 INSERT INTO friterie.articles VALUES (1001, 'mexicanos', 'viande épicée', 5, 'images/salade.jpg', 2);
-INSERT INTO friterie.articles VALUES (1, 'SteackHouse', 'SteackHouse', 5, 'images/salade.jpg', 1);
-INSERT INTO friterie.articles VALUES (2, 'Montagnard', 'Montagnard', 9, 'images/salade.jpg', 1);
+INSERT INTO friterie.articles VALUES (2, 'Montagnard', 'Montagnard', 9, 'img/burgers/Montagnard.jpg', 1);
+INSERT INTO friterie.articles VALUES (1, 'SteackHouse', 'SteackHouse', 5, 'img/burgers/steackHouse.jpg', 1);
 
 
 --
@@ -3615,7 +3615,7 @@ ALTER TABLE ONLY friterie.categories
     ADD CONSTRAINT categories_pk PRIMARY KEY (id_categorie);
 
 
--- Completed on 2025-12-20 14:57:25
+-- Completed on 2025-12-20 16:38:14
 
 --
 -- PostgreSQL database dump complete
