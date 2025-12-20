@@ -5,45 +5,21 @@
 <h1>Menu du restaurant</h1>
 
 <div class="maitre-detail">
-    <!-- SECTION MAÎTRE : sélection de catégorie -->
-    <div class="maitre">
-        <h3>Burgers</h3>
-        <ul class="categories">
-            @foreach (var burger_item in burgers)
-            {
-                <li class="@(burger_item == categorieSelectionnee ? "selected" : "")"
-                    @onclick="@(() => ChangerBurger(burger_item))">
-                    @burger_item
-                </li>
-            }
-        </ul>
-    </div>
 
     <!-- SECTION LISTE : plats selon la catégorie -->
     <div class="liste">
-        <h3>@categorieSelectionnee</h3>
 
-        @if (platsFiltres == null)
-        {
-            <p><em>Chargement...</em></p>
-        }
-        else if (platsFiltres.Count == 0)
-        {
-            <p><em>Aucun plat dans cette catégorie.</em></p>
-        }
-        else
-        {
-            <ul class="plats">
-                @foreach (var plat in platsFiltres)
+            <h3>Burgers</h3>
+            <ul class="categories">
+                @foreach (var burger_item in burgers)
                 {
-                    <li class="plat-item @(plat == platSelectionne ? "selected" : "")"
-                        @onclick="@(() => SelectionnerPlat(plat))">
-                        <img src="@plat.ImageUrl" alt="@plat.Nom" />
-                        <span>@plat.Nom</span>
+                    <li class="@(burger_item == categorieSelectionnee ? "selected" : "")"
+                        @onclick="@(() => ChangerBurger(burger_item))">
+                        @burger_item
                     </li>
                 }
             </ul>
-        }
+
     </div>
 
     <!-- SECTION DÉTAIL -->

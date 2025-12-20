@@ -36,6 +36,8 @@ namespace Friterie.API.TestsUnits
         private const string GET_ALIMENTS_BDD = "/FriterieService/BDD/GetAliments";
         private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieService/BDD/GetGroupesAliments";
 
+        private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
+
         [Fact]
         public async Task GetCountAlimentTest()
         {
@@ -86,6 +88,44 @@ namespace Friterie.API.TestsUnits
  
                 // Désérialiser la répoBnse JSON en dictionnaire
                 var rep = JsonConvert.DeserializeObject<List<Aliment>>(jsonResponse);
+                if (rep == null)
+                    Console.WriteLine("Deserialization resulted in null.");
+
+                // Assert
+                Assert.Equal(rep.Count, 7);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+        }
+
+        [Fact]
+        public async Task GetArticlesTest()
+        {
+            try
+            {
+                // Arrange
+                HttpClient client = new HttpClient();
+                // Lire la réponse brute en tant que chaîne
+                // Construire l'URL avec le paramètre idRame
+                //GetAlimentsBDD(int type, int limit, int offset)
+                int type = 1;
+                int limit = 1000;
+                int offset = 0;
+
+
+                var requestUri = $"{Friterie_SERVICE_URI}{GET_ARTICLES_BDD}";
+                requestUri += $"?in_type={Uri.EscapeDataString(type.ToString())}";
+                requestUri += $"&in_limit={Uri.EscapeDataString(limit.ToString())}";
+                requestUri += $"&in_offset={Uri.EscapeDataString(offset.ToString())}";
+
+
+                var jsonResponse = await client.GetStringAsync(requestUri);
+
+                // Désérialiser la répoBnse JSON en dictionnaire
+                var rep = JsonConvert.DeserializeObject<List<Article>>(jsonResponse);
                 if (rep == null)
                     Console.WriteLine("Deserialization resulted in null.");
 

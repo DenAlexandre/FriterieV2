@@ -26,7 +26,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Friterie.API\Friterie.API.csproj" />
-    <ProjectReference Include="..\Friterie.Server\Friterie.API.csproj" />
   </ItemGroup>
 
 
