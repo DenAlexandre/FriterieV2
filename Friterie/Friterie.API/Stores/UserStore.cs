@@ -42,7 +42,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT * FROM friterie.get_User_by_id(@p_user_id)";
+            var sql = "SELECT * FROM friterie.fn_get_users_by_id(@p_user_id)";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue($"p_user_id", NpgsqlDbType.Integer, user_id);
@@ -73,7 +73,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT * FROM friterie.get_User(@p_limit, @p_offset)";
+            var sql = "SELECT * FROM friterie.fn_get_users(@p_limit, @p_offset)";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_limit", NpgsqlDbType.Integer, limit);
@@ -106,7 +106,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.ps_insert_users(@p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created);";
+            var sql = "CALL friterie.sp_insert_users(@p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created);";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_email", (object?)entity.Email ?? DBNull.Value);
@@ -124,10 +124,16 @@
         // =======================
         public async Task UpdateUserAsync(User entity)
         {
+            if (entity.UserId == null)
+            {
+                throw new ArgumentException("User ID cannot be null for update operation.");
+            }
+
+
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT friterie.update_User(@p_user_id, @p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created)";
+            var sql = "CALL friterie.sp_update_users(@p_user_id, @p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created)";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_user_id", (object?)entity.UserId ?? DBNull.Value);
@@ -137,7 +143,7 @@
             cmd.Parameters.AddWithValue("p_last_name", (object?)entity.LastName ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_phone_number", (object?)entity.PhoneNumber ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_address", (object?)entity.Address ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("p_created", (object?)entity.Created ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_created", NpgsqlDbType.Timestamp, DateTime.SpecifyKind(entity.Created, DateTimeKind.Unspecified));
 
             await cmd.ExecuteNonQueryAsync();
         }
@@ -150,7 +156,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT friterie.delete_User(@p_user_id)";
+            var sql = "CALL friterie.sp_delete_users(@p_user_id);";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue($"p_user_id", user_id);

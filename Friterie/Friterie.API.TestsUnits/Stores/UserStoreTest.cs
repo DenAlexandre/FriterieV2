@@ -3,6 +3,7 @@ using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace Friterie.API.TestsUnits.Stores
 {
@@ -29,36 +30,31 @@ namespace Friterie.API.TestsUnits.Stores
         [Fact]
         public async Task DeleteUserAsync()
         {
-            int user_id;
+            int user_id = 4;
 
-            var list = await UserStore.GetAllUsersAsync(0, 100);
-        }
-
-        [Fact]
-        public async Task GetAllAsync()
-        {
-
-
-            var list = await UserStore.GetAllUsersAsync(0,100);
-
-            Assert.NotEqual(0, list.Count);
-
-
+            await UserStore.DeleteUserAsync(user_id);
         }
 
 
         [Fact]
         public async Task GetAllUsersAsync()
         {
-            int limit;
-            int offset;
+            int limit = 100;
+            int offset = 0;
+
+            var list = await UserStore.GetAllUsersAsync(limit, offset);
+
+            Assert.NotEqual(0, list.Count);
         }
 
 
         [Fact]
         public async Task GetByIdAsync()
         {
-            int user_id;
+            int user_id = 5;
+            var list = await UserStore.GetByIdAsync(user_id);
+
+            Assert.Equal(user_id, list.UserId);
         }
 
 
@@ -88,10 +84,22 @@ namespace Friterie.API.TestsUnits.Stores
         [Fact]
         public async Task UpdateUserAsync()
         {
+
+
+
             User entity = new User
             {
-                Email = ""
+                UserId = 5,
+                Email = "den.alexandre2@gmail.com",
+                FirstName = "Denis",
+                LastName = "Alexandre",
+                Password = "password",
+                PhoneNumber = "0123456789",
+                Address = "6 Rue de la clé, 45897 Moulinssard",
+                Created = DateTime.UtcNow,
+
             };
+            await UserStore.UpdateUserAsync(entity);
         }
     }
 }
