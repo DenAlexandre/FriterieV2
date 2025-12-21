@@ -61,8 +61,8 @@ namespace Friterie.API.TestsUnits.Stores
         [Fact]
         public async Task InsertUserAsync()
         {
-            //call friterie.ps_insert_users('den.alexandre@gmail.com', 'Denis', 'Alexandre', 'password', '0123456789', '"6 Rue de la clé, 45897 Moulinssard', now()::timestamp without time zone);
 
+            //call friterie.ps_insert_users('den.alexandre@gmail.com', 'Denis', 'Alexandre', 'password', '0123456789', '"6 Rue de la clé, 45897 Moulinssard', now()::timestamp without time zone);
 
             User entity = new User
             {
