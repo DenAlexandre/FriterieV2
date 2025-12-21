@@ -1,0 +1,57 @@
+﻿@page "/home2"
+@inject NavigationManager Navigation
+
+<PageTitle>Accueil - Friterie</PageTitle>
+
+<div class="container mt-5">
+    <div class="text-center">
+        <h1 class="display-3 fw-bold mb-4">🍔 Bienvenue à la Friterie</h1>
+        <p class="lead mb-5">Les meilleurs burgers, sauces et menus de la région !</p>
+
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <img src="/images/hero-burger.jpg" alt="Burger" class="img-fluid rounded shadow"
+                     onerror="this.src='https://via.placeholder.com/800x400?text=Friterie'" />
+            </div>
+        </div>
+
+        <div class="d-grid gap-3 d-md-flex justify-content-center">
+            <button class="btn btn-primary btn-lg px-5" @onclick='() => Navigation.NavigateTo("/products")'>
+                Voir nos produits
+            </button>
+            <button class="btn btn-outline-primary btn-lg px-5" @onclick='() => Navigation.NavigateTo("/register")'>
+                Créer un compte
+            </button>
+        </div>
+    </div>
+
+    <div class="row mt-5 g-4">
+        <div class="col-md-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="display-4 mb-3">🍔</div>
+                    <h5 class="card-title">Burgers Maison</h5>
+                    <p class="card-text">Steaks frais, pain artisanal et ingrédients de qualité</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="display-4 mb-3">🍟</div>
+                    <h5 class="card-title">Frites Belges</h5>
+                    <p class="card-text">Croustillantes à l'extérieur, fondantes à l'intérieur</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 text-center border-0 shadow-sm">
+                <div class="card-body">
+                    <div class="display-4 mb-3">🥫</div>
+                    <h5 class="card-title">Sauces Maison</h5>
+                    <p class="card-text">Recettes traditionnelles et authentiques</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -21,7 +21,7 @@
         private const string FN_GET_ALIMENTS_BDD = "select * from friterie.fn_get_aliments";
         private const string FN_GET_GROUPE_ALIMENTS_BDD = "select * from friterie.fn_get_groupes_aliments";
 
-        private const string FN_GET_ARTICLES_BDD = "select * from friterie.fn_get_articles";
+        private const string FN_GET_PRODUCTS_BDD = "select * from friterie.fn_get_products";
 
         #region variables
 
@@ -42,8 +42,6 @@
             long compteur = 0;
             try
             {
-
-
 
                 await using var conn = new NpgsqlConnection(_connectionString);
                 await conn.OpenAsync();
@@ -224,21 +222,15 @@
         public async Task<List<Product>> GetProducts(int in_type, int in_limit, int in_offset)
         {
 
-
-
-
-
             var articles = new List<Product>();
             try
             {
-
-
 
                 await using var conn = new NpgsqlConnection(_connectionString);
                 await conn.OpenAsync();
 
 
-                string fn_call = FN_GET_ARTICLES_BDD;
+                string fn_call = FN_GET_PRODUCTS_BDD;
                 string ps_parameters = "(@in_type ,@in_limit,@in_offset)";
 
                 using NpgsqlCommand command = new(fn_call + ps_parameters, conn);
@@ -260,14 +252,15 @@
                                 {
                                     TypeProduct = new TypeProduct
                                     {
-                                        TypeProductCode = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                                        TypeProductNom = reader.GetString(7) as string,
+                                        TypeProductCode = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                                        TypeProductNom = reader.GetString(8) as string,
                                     },
                                     Id = reader.GetInt32(0),
                                     Name = reader.GetString(1) as string,
                                     Description = reader.GetString(2) as string,
                                     Price =  reader.GetDecimal(3),
                                     ImageUrl = reader.GetString(4) as string,
+                                    Stock = reader.GetInt32(5),
                                 });
                             }
                             catch (Exception ex)

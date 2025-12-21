@@ -1,6 +1,9 @@
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
+using Friterie.Authentication;
+using Friterie.BlazorServer.Services;
+using Friterie.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -9,8 +12,6 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
-using Friterie.Authentication;
-using Friterie.Services;
 using Serilog;
 
 
@@ -30,6 +31,11 @@ builder.Services.AddAuthorization();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
+
+// Services applicatifs
+builder.Services.AddScoped<ApiService>();
+builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<AuthStateService>();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 //builder.Services.AddSingleton<UserServiceView>();
@@ -38,6 +44,10 @@ builder.Services.AddSingleton<WeatherForecastService>();
 
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddHostedService(provider => provider.GetRequiredService<ProductService>());
+
+
+
+
 
 builder.Services.AddMudServices();
 
@@ -53,6 +63,20 @@ builder.Services
 
 // Register Fluent UI services
 builder.Services.AddFluentUIComponents();
+
+
+
+
+
+// Session pour maintenir l'état
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 
 
 var app = builder.Build();
