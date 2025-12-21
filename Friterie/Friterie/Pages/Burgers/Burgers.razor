@@ -32,7 +32,7 @@
         <h3>Détail</h3>
         @if (_productSelectionne != null)
         {
-            <img src="@_productSelectionne." alt="@_productSelectionne.Name" class="image-detail" />
+            <img src="@_productSelectionne.ImageUrl" alt="@_productSelectionne.Name" class="image-detail" />
             <h4>@_productSelectionne.Name</h4>
             <p>@_productSelectionne.Description</p>
             <p><b>Prix :</b> @_productSelectionne.Price.ToString("0.00 €")</p>

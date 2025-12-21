@@ -36,7 +36,7 @@ namespace Friterie.API.TestsUnits
         private const string GET_ALIMENTS_BDD = "/FriterieService/BDD/GetAliments";
         private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieService/BDD/GetGroupesAliments";
 
-        private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
+        private const string GET_PRODUCTS_BDD = "/FriterieService/BDD/GetProducts";
 
         [Fact]
         public async Task GetCountAlimentTest()
@@ -116,7 +116,7 @@ namespace Friterie.API.TestsUnits
                 int offset = 0;
 
 
-                var requestUri = $"{Friterie_SERVICE_URI}{GET_ARTICLES_BDD}";
+                var requestUri = $"{Friterie_SERVICE_URI}{GET_PRODUCTS_BDD}";
                 requestUri += $"?in_type={Uri.EscapeDataString(type.ToString())}";
                 requestUri += $"&in_limit={Uri.EscapeDataString(limit.ToString())}";
                 requestUri += $"&in_offset={Uri.EscapeDataString(offset.ToString())}";

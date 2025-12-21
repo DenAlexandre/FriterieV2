@@ -1,7 +1,7 @@
 ﻿
 using Friterie.API.Models;
 using Friterie.API.Stores;
-
+using Friterie.Shared.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -19,7 +19,7 @@ public class ArticleController : ControllerBase
     private readonly IFriterieStore _FriterieStore;
     //https://localhost:5001/FriterieService/BDD/GetAliments
 
-    private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
+    private const string GET_PRODUCTS_BDD = "/FriterieService/BDD/GetProducts";
 
 
     public ArticleController(IConfiguration configuration, IFriterieStore FriterieStore)
@@ -31,18 +31,18 @@ public class ArticleController : ControllerBase
 
 
     [HttpGet]
-    [Route(GET_ARTICLES_BDD)]
+    [Route(GET_PRODUCTS_BDD)]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(List<Article>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetArticlesBDD(int in_type, int in_limit, int in_offset)
+    [ProducesResponseType(typeof(List<Product>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProductsBDD(int in_type, int in_limit, int in_offset)
     {
-        var aliases = await Task.FromResult(await GetArticlesBDD(_FriterieStore, in_type, in_limit, in_offset));
+        var aliases = await Task.FromResult(await GetProductsBDD(_FriterieStore, in_type, in_limit, in_offset));
         return Ok(aliases);
     }
 
-    private static async Task<List<Article>> GetArticlesBDD(IFriterieStore store, int in_type, int in_limit, int in_offset)
+    private static async Task<List<Product>> GetProductsBDD(IFriterieStore store, int in_type, int in_limit, int in_offset)
     {
-        return store is null ? throw new ArgumentNullException(nameof(store)) : await store.GetArticles(in_type, in_limit, in_offset);
+        return store is null ? throw new ArgumentNullException(nameof(store)) : await store.GetProducts(in_type, in_limit, in_offset);
     }
 
 

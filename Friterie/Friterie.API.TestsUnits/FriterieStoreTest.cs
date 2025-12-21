@@ -1,5 +1,6 @@
 using Friterie.API.Models;
 using Friterie.API.Stores;
+using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
  
@@ -55,11 +56,11 @@ namespace Friterie.API.TestsUnits
         [Fact]
         public async Task GetArticlesTest()
         {
-            List<Article> articles = new List<Article>();
+            List<Product> products = new List<Product>();
 
-            articles = await FriterieStore.GetArticles(1, 1000, 0);
+            products = await FriterieStore.GetProducts(1, 1000, 0);
 
-            Assert.NotNull(articles);
+            Assert.NotNull(products);
 
 
         }

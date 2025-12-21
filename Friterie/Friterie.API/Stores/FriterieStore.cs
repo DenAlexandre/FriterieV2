@@ -1,6 +1,7 @@
 ﻿namespace Friterie.API.Stores
 {
     using Friterie.API.Models;
+    using Friterie.Shared.Models;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
@@ -220,14 +221,14 @@
             return dico;
         }
 
-        public async Task<List<Article>> GetArticles(int in_type, int in_limit, int in_offset)
+        public async Task<List<Product>> GetProducts(int in_type, int in_limit, int in_offset)
         {
 
 
 
 
 
-            var articles = new List<Article>();
+            var articles = new List<Product>();
             try
             {
 
@@ -255,18 +256,18 @@
                             try
                             {
                                 //SELECT a.art_id, a.art_nom, a.art_desc, a.art_prix, a.art_url_img, a.art_type, c.id_categorie, c.nom_categorie
-                                articles.Add(new Article()
+                                articles.Add(new Product()
                                 {
-                                    TGroupeArticle = new GroupeArticle
+                                    TypeProduct = new TypeProduct
                                     {
-                                        TGroupeCode = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
-                                        TGroupeNom = reader.GetString(7) as string,
+                                        TypeProductCode = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                                        TypeProductNom = reader.GetString(7) as string,
                                     },
-                                    TArticleId = reader.GetInt32(0) as int?,
-                                    TArticleNom = reader.GetString(1) as string,
-                                    TArticleDesc = reader.GetString(2) as string,
-                                    TArticlePrix = reader.IsDBNull(3) ? null : reader.GetDecimal(3) as decimal?,
-                                    TArticleURLIMg = reader.GetString(4) as string,
+                                    Id = reader.GetInt32(0),
+                                    Name = reader.GetString(1) as string,
+                                    Description = reader.GetString(2) as string,
+                                    Price =  reader.GetDecimal(3),
+                                    ImageUrl = reader.GetString(4) as string,
                                 });
                             }
                             catch (Exception ex)
