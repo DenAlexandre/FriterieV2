@@ -1,6 +1,4 @@
-﻿ 
-
-namespace Friterie.API.Models
+﻿ namespace Friterie.API.Models
 {
     public class Article : ISelectable
     {

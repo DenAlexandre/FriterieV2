@@ -1,7 +1,8 @@
 @page "/burgers"
+
 @using Friterie.API.Models
 @using Friterie.Services
-@inject AlimentService AlimentServiceView
+@inject ProductService AlimentServiceView
 
 
 <PageTitle>Plats</PageTitle>
@@ -17,9 +18,9 @@
             <ul class="categories">
             @foreach (var burger_item in _burgers)
                 {
-                <li class="@(burger_item.TArticleId == _articleSelectionne?.TArticleId ? "selected" : "")"
+                <li class="@(burger_item.Id == _productSelectionne?.Id ? "selected" : "")"
                         @onclick="@(() => ChangerBurger(burger_item))">
-                        @burger_item.TArticleNom
+                        @burger_item.Name
                     </li>
                 }
             </ul>
@@ -29,12 +30,12 @@
     <!-- SECTION DÉTAIL -->
     <div class="detail">
         <h3>Détail</h3>
-        @if (_articleSelectionne != null)
+        @if (_productSelectionne != null)
         {
-            <img src="@_articleSelectionne.TArticleURLIMg" alt="@_articleSelectionne.TArticleNom" class="image-detail" />
-            <h4>@_articleSelectionne.TArticleNom</h4>
-            <p>@_articleSelectionne.TArticleDesc</p>
-            <p><b>Prix :</b> @_articleSelectionne.TArticlePrix?.ToString("0.00 €")</p>
+            <img src="@_productSelectionne." alt="@_productSelectionne.Name" class="image-detail" />
+            <h4>@_productSelectionne.Name</h4>
+            <p>@_productSelectionne.Description</p>
+            <p><b>Prix :</b> @_productSelectionne.Price.ToString("0.00 €")</p>
         }
         else
         {
@@ -47,37 +48,37 @@
 
     const int CATEGORIE = 1;
 
-    private List<Article> _burgers = new();
-    private Article? _articleSelectionne;
+    private List<Product> _burgers = new();
+    private Product? _productSelectionne;
 
 
 
     protected override async Task OnInitializedAsync()
     {
-        _burgers = await AlimentServiceView.GetArticlesAsync(CATEGORIE, 1000, 0);
+        _burgers = await AlimentServiceView.GetProductsAsync(CATEGORIE, 1000, 0);
 
         //FiltrerCategorie();
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if (_articleSelectionne == null)
-            _articleSelectionne = _burgers.FirstOrDefault();
+        if (_productSelectionne == null)
+            _productSelectionne = _burgers.FirstOrDefault();
 
         base.OnAfterRender(firstRender);
     }
 
 
-    private void ChangerBurger(Article article)
+    private void ChangerBurger(Product product)
     {
         // categorieSelectionnee = categorie;
-        _articleSelectionne = _burgers.FirstOrDefault(x=>x.TArticleId == article.TArticleId);
+        _productSelectionne = _burgers.FirstOrDefault(x=>x.Id == product.Id);
         // FiltrerCategorie();
     }
 
-    private void SelectionnerBurger(Article article)
+    private void SelectionnerBurger(Product product)
     {
-        _articleSelectionne = article;
+        _productSelectionne = product;
     }
 
 

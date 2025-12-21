@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friterie.API", "Friterie.AP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friterie.API.TestsUnits", "Friterie.API.TestsUnits\Friterie.API.TestsUnits.csproj", "{D834DF53-11FC-FDD0-CFF2-9A7AB08E1F96}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friterie.Shared", "Friterie.Shared\Friterie.Shared.csproj", "{FFE9C84A-CC6D-2812-BBD1-C02FA6083029}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D834DF53-11FC-FDD0-CFF2-9A7AB08E1F96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D834DF53-11FC-FDD0-CFF2-9A7AB08E1F96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D834DF53-11FC-FDD0-CFF2-9A7AB08E1F96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFE9C84A-CC6D-2812-BBD1-C02FA6083029}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFE9C84A-CC6D-2812-BBD1-C02FA6083029}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFE9C84A-CC6D-2812-BBD1-C02FA6083029}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFE9C84A-CC6D-2812-BBD1-C02FA6083029}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

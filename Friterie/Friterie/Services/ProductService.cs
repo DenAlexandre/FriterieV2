@@ -1,10 +1,11 @@
 using Friterie.API.Models;
+using Friterie.Shared.Models;
 using Newtonsoft.Json;
  
 
 namespace Friterie.Services
 {
-    public class AlimentService(IHttpClientFactory httpClientFactory, ILogger<AlimentService> logger) : IHostedService, IDisposable
+    public class ProductService(IHttpClientFactory httpClientFactory, ILogger<ProductService> logger) : IHostedService, IDisposable
     {
 
         const string Friterie_SERVICE_URI = "https://localhost:5001";
@@ -126,9 +127,9 @@ namespace Friterie.Services
         }
 
 
-        public async Task<List<Article>> GetArticlesAsync(int type, int limit, int offset)
+        public async Task<List<Product>> GetProductsAsync(int type, int limit, int offset)
         {
-            List<Article> list = new List<Article>();
+            List<Product> list = new List<Product>();
 
             try
             {
@@ -142,7 +143,7 @@ namespace Friterie.Services
                 // Lire la réponse brute en tant que chaîne 
                 var jsonResponse = await client.GetStringAsync(requestUri);
                 // Désérialiser le JSON en un objet RameInformation
-                var obj = JsonConvert.DeserializeObject<List<Article>>(jsonResponse);
+                var obj = JsonConvert.DeserializeObject<List<Product>>(jsonResponse);
                 if (obj == null)
                 {
                     Console.WriteLine("Deserialization resulted in null.");
