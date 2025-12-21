@@ -29,7 +29,7 @@ public class AuthService
         var user = new User
         {
             Email = email,
-            PasswordHash = HashPassword(password),
+            Password = HashPassword(password),
             FirstName = firstName,
             LastName = lastName,
             PhoneNumber = phoneNumber,
@@ -42,7 +42,7 @@ public class AuthService
     public (User? user, string? token) Login(string email, string password)
     {
         var user = _dataService.GetUserByEmail(email);
-        if (user == null || !VerifyPassword(password, user.PasswordHash))
+        if (user == null || !VerifyPassword(password, user.Password))
             return (null, null);
 
         var token = GenerateJwtToken(user);
@@ -53,7 +53,7 @@ public class AuthService
     {
         var claims = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
             new Claim(ClaimTypes.Email, user.Email),
             new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
         };

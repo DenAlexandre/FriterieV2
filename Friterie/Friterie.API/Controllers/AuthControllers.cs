@@ -23,7 +23,7 @@ public class AuthController : ControllerBase
         if (user == null)
             return BadRequest(new { message = "Un utilisateur avec cet email existe déjà" });
 
-        return Ok(new { message = "Inscription réussie", userId = user.Id });
+        return Ok(new { message = "Inscription réussie", userId = user.UserId });
     }
 
     [HttpPost("login")]
@@ -39,7 +39,7 @@ public class AuthController : ControllerBase
             token,
             user = new
             {
-                user.Id,
+                user.UserId,
                 user.Email,
                 user.FirstName,
                 user.LastName

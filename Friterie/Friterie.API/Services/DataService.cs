@@ -125,8 +125,8 @@ public class DataService
 
     public User AddUser(User user)
     {
-        user.Id = _userIdCounter++;
-        _users[user.Id] = user;
+        user.UserId = _userIdCounter++;
+        _users[user.UserId] = user;
         return user;
     }
 

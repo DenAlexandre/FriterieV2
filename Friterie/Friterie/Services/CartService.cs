@@ -12,7 +12,7 @@ public class CartService
 
     public void AddItem(Product product, int quantity = 1)
     {
-         vvar existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+         var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
 
         if (existingItem != null)
         {

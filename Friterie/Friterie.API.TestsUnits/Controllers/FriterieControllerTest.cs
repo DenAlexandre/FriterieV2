@@ -3,13 +3,13 @@ using Friterie.API.Stores;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
- 
+
 
 using System.Collections.Generic;
 using System.Reflection.Emit;
 
 
-namespace Friterie.API.TestsUnits
+namespace Friterie.API.TestsUnits.Controllers
 {
     public class FriterieControllerTest
     {

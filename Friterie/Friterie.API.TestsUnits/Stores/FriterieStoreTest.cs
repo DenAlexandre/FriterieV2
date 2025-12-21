@@ -3,11 +3,11 @@ using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
- 
 
 
 
-namespace Friterie.API.TestsUnits
+
+namespace Friterie.API.TestsUnits.Stores
 {
     public class FriterieStoreTest
     {
