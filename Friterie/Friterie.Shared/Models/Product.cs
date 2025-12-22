@@ -1,4 +1,6 @@
-﻿namespace Friterie.Shared.Models
+﻿using static Friterie.Shared.Models.EnumFriterie;
+
+namespace Friterie.Shared.Models
 {
 
     public class Product

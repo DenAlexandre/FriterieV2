@@ -4,18 +4,16 @@ using System.Text;
 
 namespace Friterie.Shared.Models
 {
-    public class EnumFriterie
+    public static class EnumFriterie
     {
 
         public enum ProductTypeEnum : ushort
         {
-
+            All = 0,
             Burgers = 1,
             Viandes = 2,
             Sauces = 10, //
             Menus = 20, //
-
-
         }
 
         public enum StatusTypeEnum : ushort

@@ -24,20 +24,20 @@
     </div>
 
     <div class="btn-group mb-4" role="group">
-        <button class="btn @(selectedCategory == "All" ? "btn-primary" : "btn-outline-primary")"
-                @onclick='() => FilterByCategory("All")'>
+        <button class="btn @(selectedCategory == ProductTypeEnum.All ? "btn-primary" : "btn-outline-primary")"
+                @onclick='() => FilterByCategory(ProductTypeEnum.All)'>
             Tout
         </button>
-        <button class="btn @(selectedCategory == "Burgers" ? "btn-primary" : "btn-outline-primary")"
-                @onclick='() => FilterByCategory("Burgers")'>
+        <button class="btn @(selectedCategory == ProductTypeEnum.Burgers ? "btn-primary" : "btn-outline-primary")"
+                @onclick='() => FilterByCategory(ProductTypeEnum.Burgers)'>
             🍔 Burgers
         </button>
-        <button class="btn @(selectedCategory == "Sauces" ? "btn-primary" : "btn-outline-primary")"
-                @onclick='() => FilterByCategory("Sauces")'>
+        <button class="btn @(selectedCategory == ProductTypeEnum.Sauces ? "btn-primary" : "btn-outline-primary")"
+                @onclick='() => FilterByCategory(ProductTypeEnum.Sauces)'>
             🥫 Sauces
         </button>
-        <button class="btn @(selectedCategory == "Menus" ? "btn-primary" : "btn-outline-primary")"
-                @onclick='() => FilterByCategory("Menus")'>
+        <button class="btn @(selectedCategory == ProductTypeEnum.Menus ? "btn-primary" : "btn-outline-primary")"
+                @onclick='() => FilterByCategory(ProductTypeEnum.Menus)'>
             🍟 Menus
         </button>
     </div>
@@ -107,13 +107,13 @@
 
 @code {
     private List<Product> _products = new();
-    private string selectedCategory = "All";
+    private ProductTypeEnum selectedCategory = ProductTypeEnum.All;
     private bool isLoading = true;
 
     private List<Product> FilteredProducts =>
-        selectedCategory == "All"
+        selectedCategory == ProductTypeEnum.All
             ? _products
-            : _products.Where(p => p.TypeProduct.TypeProductNom == selectedCategory).ToList();
+            : _products.Where(p => p.TypeProduct.TypeProductCode == (int)selectedCategory).ToList();
 
     protected override async Task OnInitializedAsync()
     {
@@ -138,7 +138,7 @@
         }
     }
 
-    private void FilterByCategory(string category)
+    private void FilterByCategory(ProductTypeEnum category)
     {
         selectedCategory = category;
     }

@@ -22,12 +22,12 @@ public class ProductService
 
     public async Task<List<Product>> GetAllProducts(int type, int limit , int offset) => await _productStore.GetProducts(type, limit, offset);
 
-    public async Task<List<Product>> GetProductsByCategory(string category)
+    public async Task<List<Product>> GetProductsByCategory(ProductTypeEnum category)
     {
         var products = await _productStore.GetProducts((int)ProductTypeEnum.Burgers, 1000, 0);
 
         return products
-            .Where(p => p.TypeProduct.TypeProductNom == category)
+            .Where(p => p.TypeProduct.TypeProductCode == (int)category)
             .ToList();
     }
 

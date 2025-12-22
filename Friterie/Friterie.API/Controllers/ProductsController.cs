@@ -1,8 +1,10 @@
 ﻿namespace Friterie.API.Controllers;
 
-using Microsoft.AspNetCore.Mvc;
 using Friterie.API.Services;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Threading.Tasks;
+using static Friterie.Shared.Models.EnumFriterie;
 
 [ApiController]
 [Route("FriterieAPI/api/[controller]")]
@@ -26,7 +28,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet(GET_PRODUCTS_BY_CATEGORY_BDD + "/{category}")]
-    public async Task<IActionResult> GetProductsByCategory(string category)
+    public async Task<IActionResult> GetProductsByCategory(ProductTypeEnum category)
     {
         var products = await _productService.GetProductsByCategory(category);
         return Ok(products);
