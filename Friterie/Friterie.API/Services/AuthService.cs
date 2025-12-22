@@ -1,5 +1,6 @@
 ﻿namespace Friterie.API.Services;
 
+using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -8,21 +9,24 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
 
 public class AuthService
 {
     private readonly DataService _dataService;
     private readonly IConfiguration _configuration;
+    private readonly IUserStore _userStore;
 
-    public AuthService(DataService dataService, IConfiguration configuration)
+    public AuthService(IUserStore userStore, DataService dataService, IConfiguration configuration)
     {
         _dataService = dataService;
         _configuration = configuration;
+        _userStore = userStore;
     }
 
-    public User? Register(string email, string password, string firstName, string lastName, string phoneNumber, string address)
+    public async Task<User?> Register(string email, string password, string firstName, string lastName, string phoneNumber, string address)
     {
-        var existingUser = _dataService.GetUserByEmail(email);
+        var existingUser = await _userStore.GetUserByEmail(email);
         if (existingUser != null)
             return null;
 
@@ -36,13 +40,15 @@ public class AuthService
             Address = address
         };
 
-        return _dataService.AddUser(user);
+        await _userStore.InsertUserAsync(user);
+
+        return user;
     }
 
-    public (User? user, string? token) Login(string email, string password)
+    public async Task<(User? user, string? token)> Login(string email, string password)
     {
-        var user = _dataService.GetUserByEmail(email);
-        if (user == null || !VerifyPassword(password, user.Password))
+        var user = await _userStore.GetUserByEmail(email);
+        if (user == null || !VerifyPassword(password, user?.Password))
             return (null, null);
 
         var token = GenerateJwtToken(user);

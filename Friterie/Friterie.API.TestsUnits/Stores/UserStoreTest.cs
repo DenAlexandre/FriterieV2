@@ -59,6 +59,16 @@ namespace Friterie.API.TestsUnits.Stores
 
 
         [Fact]
+        public async Task GetUserByEmail()
+        {
+            string email = "den.alexandre@gmail.com";
+            var list = await UserStore.GetUserByEmail(email);
+
+            Assert.Equal(email, list.Email);
+        }
+
+
+        [Fact]
         public async Task InsertUserAsync()
         {
 

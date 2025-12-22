@@ -22,6 +22,7 @@ namespace Friterie.API.Stores
         public Task DeleteUserAsync(int user_id);
 
 
+        public Task<User?> GetUserByEmail(string email);
     }
 
 

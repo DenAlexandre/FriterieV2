@@ -27,7 +27,34 @@
 
         #endregion
 
+        // =======================
+        // GET BY ID
+        // =======================
+        public async Task<User?> GetUserByEmail(string email)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
 
+            var sql = "SELECT * FROM friterie.fn_get_users_by_email(@p_email)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue($"p_email", NpgsqlDbType.Varchar, email);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync()) return null;
+
+            return new User
+            {
+                UserId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
+                Email = reader.IsDBNull(1) ? default : reader.GetString(1),
+                Password = reader.IsDBNull(2) ? default : reader.GetString(2),
+                FirstName = reader.IsDBNull(3) ? default : reader.GetString(3),
+                LastName = reader.IsDBNull(4) ? default : reader.GetString(4),
+                PhoneNumber = reader.IsDBNull(5) ? default : reader.GetString(5),
+                Address = reader.IsDBNull(6) ? default : reader.GetString(6),
+                Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7)
+            };
+        }
 
         // =======================
         // GET BY ID
@@ -159,22 +186,7 @@
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // =======================
-        // MAPPING
-        // =======================
-        private static User Map(NpgsqlDataReader reader) => new User
-        {
-            UserId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
-            Email = reader.IsDBNull(1) ? default : reader.GetString(1),
-            Password = reader.IsDBNull(2) ? default : reader.GetString(2),
-            FirstName = reader.IsDBNull(3) ? default : reader.GetString(3),
-            LastName = reader.IsDBNull(4) ? default : reader.GetString(4),
-            PhoneNumber = reader.IsDBNull(5) ? default : reader.GetString(5),
-            Address = reader.IsDBNull(6) ? default : reader.GetString(6),
-            Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7)
-        };
 
-        private static string ToPascal(string name) => string.Concat(name.Split('_').Select(s => char.ToUpper(s[0]) + s[1..]));
 
     }
 }
