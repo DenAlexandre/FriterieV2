@@ -16,8 +16,4 @@
     <ProjectReference Include="..\Friterie.Shared\Friterie.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>

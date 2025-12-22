@@ -1,9 +1,8 @@
 ﻿namespace Friterie.API.Controllers;
 
+using Friterie.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Friterie.API.Services;
-using Friterie.API.DTOs;
 using System.Security.Claims;
 
 [Authorize]

@@ -11,9 +11,9 @@ using static Friterie.Shared.Models.EnumFriterie;
 
 public class OrderService
 {
-    private readonly OrderStore _orderStore;
+    private readonly IOrderStore _orderStore;
 
-    public OrderService(OrderStore orderStore)
+    public OrderService(IOrderStore orderStore)
     {
         _orderStore = orderStore;
     }

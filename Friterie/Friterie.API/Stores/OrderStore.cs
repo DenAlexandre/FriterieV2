@@ -197,35 +197,35 @@
         // =======================
         // GET ALL (pagination)
         // =======================
-        public async Task<List<OrderItem>> GetAllOrderItemAsync(int limit, int offset)
-        {
-            var result = new List<OrderItem>();
+        //public async Task<List<OrderItem>> GetAllOrderItemAsync(int limit, int offset)
+        //{
+        //    var result = new List<OrderItem>();
 
-            await using var conn = new NpgsqlConnection(_connectionString);
-            await conn.OpenAsync();
+        //    await using var conn = new NpgsqlConnection(_connectionString);
+        //    await conn.OpenAsync();
 
-            var sql = "SELECT * FROM friterie.fn_get_order_item(@p_limit, @p_offset)";
+        //    var sql = "SELECT * FROM friterie.fn_get_order_item(@p_limit, @p_offset)";
 
-            await using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("p_limit", NpgsqlDbType.Integer, limit);
-            cmd.Parameters.AddWithValue("p_offset", NpgsqlDbType.Integer, offset);
+        //    await using var cmd = new NpgsqlCommand(sql, conn);
+        //    cmd.Parameters.AddWithValue("p_limit", NpgsqlDbType.Integer, limit);
+        //    cmd.Parameters.AddWithValue("p_offset", NpgsqlDbType.Integer, offset);
 
-            await using var reader = await cmd.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
-            {
-                result.Add(new OrderItem
-                {
-                    OiId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
-                    OiProductId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
-                    OiProductName = reader.IsDBNull(2) ? default : reader.GetString(2),
-                    OiQuantity = reader.IsDBNull(3) ? default : reader.GetInt32(3),
-                    OiPrice = reader.IsDBNull(4) ? default : reader.GetDecimal(4),
-                    OiOrderId = reader.IsDBNull(5) ? default : reader.GetInt32(5)
-                });
-            }
+        //    await using var reader = await cmd.ExecuteReaderAsync();
+        //    while (await reader.ReadAsync())
+        //    {
+        //        result.Add(new OrderItem
+        //        {
+        //            OiId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
+        //            OiProductId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
+        //            OiProductName = reader.IsDBNull(2) ? default : reader.GetString(2),
+        //            OiQuantity = reader.IsDBNull(3) ? default : reader.GetInt32(3),
+        //            OiPrice = reader.IsDBNull(4) ? default : reader.GetDecimal(4),
+        //            OiOrderId = reader.IsDBNull(5) ? default : reader.GetInt32(5)
+        //        });
+        //    }
 
-            return result;
-        }
+        //    return result;
+        //}
 
         // =======================
         // INSERT

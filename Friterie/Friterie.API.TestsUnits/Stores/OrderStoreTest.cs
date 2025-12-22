@@ -110,29 +110,18 @@ namespace Friterie.API.TestsUnits.Stores
         [Fact]
         public async Task DeleteOrderItemAsync()
         {
-            int user_id = 1;
+            int id = 1;
 
-            await OrderStore.DeleteOrderItemAsync(user_id);
+            await OrderStore.DeleteOrderItemAsync(id);
         }
 
-
-        [Fact]
-        public async Task GetAllOrderItemAsync()
-        {
-            int limit = 100;
-            int offset = 0;
-
-            var list = await OrderStore.GetAllOrderItemAsync(limit, offset);
-
-            Assert.NotEqual(0, list.Count);
-        }
 
 
         [Fact]
         public async Task GetOrderItemByIdAsync()
         {
-            int user_id = 2;
-            var list = await OrderStore.GetOrderItemByIdAsync(user_id);
+            int id = 1;
+            var list = await OrderStore.GetOrderItemByIdAsync(id);
 
             //Assert.Equal(user_id, list.OrderId);
         }
@@ -144,7 +133,6 @@ namespace Friterie.API.TestsUnits.Stores
             //call friterie.sp_insert_orders(7,now()::timestamp without time zone, 25.50, 2,'',true);
             OrderItem entity = new OrderItem
             {
-                OiId = 0,
                 OiProductId = 3,
                 OiProductName = "Test Product",
                 OiQuantity = 2,
@@ -165,7 +153,7 @@ namespace Friterie.API.TestsUnits.Stores
 
             OrderItem entity = new OrderItem
             {
-                OiId = 0,
+                OiId = 1,
                 OiProductId = 3,
                 OiProductName = "Test Product",
                 OiQuantity = 2,

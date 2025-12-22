@@ -1,13 +1,12 @@
 using Friterie.API.Services;
+using Friterie.API.Stores;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 
 
@@ -43,15 +42,21 @@ builder.Services.AddSingleton<DataService>();
 
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductService>();
+
+builder.Services.AddScoped<IFriterieStore, FriterieStore>();
+
+builder.Services.AddScoped<IOrderStore, OrderStore>();
 builder.Services.AddScoped<OrderService>();
+
 builder.Services.AddScoped<PaymentService>();
+
 
 // CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowBlazor", policy =>
+    options.AddPolicy("AllowedHosts", policy =>
     {
-        policy.WithOrigins("https://localhost:7001")
+        policy.WithOrigins("https://localhost:5001")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -95,7 +100,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog V1");
+       // c.SwaggerEndpoint("/swagger/v1/swagger.json", "Catalog V1");
     });
 
     RewriteOptions option = new();

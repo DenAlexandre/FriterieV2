@@ -33,7 +33,7 @@ namespace Friterie.API.Stores
         public  Task<OrderItem?> GetOrderItemByIdAsync(int oi_id);
 
 
-        public  Task<List<OrderItem>> GetAllOrderItemAsync(int limit, int offset);
+        //public  Task<List<OrderItem>> GetAllOrderItemAsync(int limit, int offset);
 
         public  Task InsertOrderItemAsync(OrderItem entity);
 
