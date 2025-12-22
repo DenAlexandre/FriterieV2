@@ -1,65 +1,95 @@
 ﻿@page "/login"
-@using Friterie.Authentication
-@inject IJSRuntime js
-@inject AuthenticationStateProvider authStateProvider
-@inject NavigationManager navManager
+@using Friterie.BlazorServer.Services
+@inject ApiService ApiService
+@inject AuthStateService AuthState
+@inject NavigationManager Navigation
 
+<PageTitle>Connexion - Friterie</PageTitle>
 
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h3 class="card-title text-center mb-4">🍔 Connexion</h3>
 
+                    @if (!string.IsNullOrEmpty(errorMessage))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            @errorMessage
+                            <button type="button" class="btn-close" @onclick="() => errorMessage = string.Empty"></button>
+                        </div>
+                    }
 
-<div class="row">
-    <div class="col-lg-4 offset-lg-4 pt-4 pb-4 border">
-        <div class="mb-3 text-center">
-            <h3>Login</h3>
-        </div>
-        <div class="mb-3">
-            <label>Username</label>
-            <input @bind="model.UserName" class="form-control" placeholder="Username" />
-        </div>
-        <div class="mb-3">
-            <label>Password</label>
-            <input @bind="model.Password" type="password" class="form-control" placeholder="Password" />
-        </div>
-        <div class="mb-3 d-grid gap-2">
-            <button @onclick="Authenticate" class="btn btn-primary">Login</button>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control form-control-lg"
+                               @bind="email"
+                               placeholder="votre@email.com" />
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Mot de passe</label>
+                        <input type="password" class="form-control form-control-lg"
+                               @bind="password"
+                               placeholder="••••••••" />
+                    </div>
+
+                    <button class="btn btn-primary btn-lg w-100 mb-3"
+                            @onclick="HandleLogin"
+                            disabled="@isLoading">
+                        @if (isLoading)
+                        {
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                        }
+                        Se connecter
+                    </button>
+
+                    <hr />
+
+                    <div class="text-center">
+                        <p class="mb-0">Pas encore de compte ?</p>
+                        <a href="/register" class="btn btn-outline-secondary mt-2">Créer un compte</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
 @code {
-    private class Model
+    private string email = "";
+    private string password = "";
+    private string errorMessage = "";
+    private bool isLoading = false;
+
+    private async Task HandleLogin()
     {
-        public string UserName { get; set; } = "admin";
-        public string Password { get; set; } = "password";
-        public string Role { get; set; } = "Administrator";
-    }
-    private Model model = new Model(); 
+        isLoading = true;
+        errorMessage = "";
 
-
-    [CascadingParameter]
-    private Task<AuthenticationState> authenticationState { get; set; }
-
-    private async Task Authenticate()
-    {
-        var authState = await authenticationState;
-
-
-        //TODO Remettre un appel en base
-        //var userSDR = await userAccountService.GetUserByLogin(model.UserName);
-        // if (userAccount == null || userAccount.Password != model.Password)
-        if (model == null || "password" != model.Password)
+        try
         {
-            await js.InvokeVoidAsync("alert", "Invalid user Name or password");
-            return;
-        }
-        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+            var response = await ApiService.LoginAsync(email, password);
+
+            if (response != null)
             {
-                UserName = model.UserName,
-                Role = model.Role,
-            });
-        // true, indicates that the navigation should be done with a full page refresh.
-        navManager.NavigateTo("/", true);
+                AuthState.Login(response.Token, response.User);
+                Navigation.NavigateTo("/products");
+            }
+            else
+            {
+                errorMessage = "Email ou mot de passe incorrect";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "Erreur de connexion. Veuillez réessayer.";
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 }

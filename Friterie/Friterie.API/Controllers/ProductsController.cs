@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Friterie.API.Services;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("FriterieAPI/api/[controller]")]
 public class ProductsController : ControllerBase
 {
     private readonly ProductService _productService;

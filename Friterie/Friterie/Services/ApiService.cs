@@ -35,7 +35,7 @@ public class ApiService
     public async Task<LoginResponse?> LoginAsync(string email, string password)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("/api/auth/login", new { email, password });
+        var response = await client.PostAsJsonAsync("FriterieAPI/api/auth/login", new { email, password });
 
         if (response.IsSuccessStatusCode)
         {
@@ -47,7 +47,7 @@ public class ApiService
     public async Task<bool> RegisterAsync(RegisterRequest request)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("/api/auth/register", request);
+        var response = await client.PostAsJsonAsync("FriterieAPI/api/auth/register", request);
         return response.IsSuccessStatusCode;
     }
 
@@ -56,21 +56,21 @@ public class ApiService
     public async Task<List<Product>> GetProductsAsync()
     {
         var client = CreateClient();
-        var products = await client.GetFromJsonAsync<List<Product>>("/api/products");
+        var products = await client.GetFromJsonAsync<List<Product>>("FriterieAPI/api/products");
         return products ?? new List<Product>();
     }
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string category)
     {
         var client = CreateClient();
-        var products = await client.GetFromJsonAsync<List<Product>>($"/api/products/category/{category}");
+        var products = await client.GetFromJsonAsync<List<Product>>($"FriterieAPI/api/products/category/{category}");
         return products ?? new List<Product>();
     }
 
     public async Task<Product?> GetProductByIdAsync(int id)
     {
         var client = CreateClient();
-        return await client.GetFromJsonAsync<Product>($"/api/products/{id}");
+        return await client.GetFromJsonAsync<Product>($"FriterieAPI/api/products/{id}");
     }
 
     // ============= ORDERS =============
@@ -78,7 +78,7 @@ public class ApiService
     public async Task<Orders?> CreateOrderAsync(List<OrderItem> items)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("/api/orders", new { items });
+        var response = await client.PostAsJsonAsync("FriterieAPI/api/orders", new { items });
 
         if (response.IsSuccessStatusCode)
         {
@@ -90,13 +90,13 @@ public class ApiService
     public async Task<Orders?> GetOrderAsync(int orderId)
     {
         var client = CreateClient();
-        return await client.GetFromJsonAsync<Orders>($"/api/orders/{orderId}");
+        return await client.GetFromJsonAsync<Orders>($"FriterieAPI/api/orders/{orderId}");
     }
 
     public async Task<List<Orders>> GetUserOrdersAsync()
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Orders>>("/api/orders/user");
+        var orders = await client.GetFromJsonAsync<List<Orders>>("FriterieAPI/api/orders/user");
         return orders ?? new List<Orders>();
     }
 
@@ -105,7 +105,7 @@ public class ApiService
     public async Task<PaymentIntentResponse?> CreatePaymentIntentAsync(decimal amount)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("/api/payment/create-intent", new { amount });
+        var response = await client.PostAsJsonAsync("FriterieAPI/api/payment/create-intent", new { amount });
 
         if (response.IsSuccessStatusCode)
         {
@@ -117,7 +117,7 @@ public class ApiService
     public async Task<bool> ConfirmPaymentAsync(int orderId, string paymentIntentId)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("/api/payment/confirm", new { orderId, paymentIntentId });
+        var response = await client.PostAsJsonAsync("FriterieAPIapi/payment/confirm", new { orderId, paymentIntentId });
         return response.IsSuccessStatusCode;
     }
 }

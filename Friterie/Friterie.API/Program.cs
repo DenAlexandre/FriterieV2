@@ -40,6 +40,7 @@ builder.Services.AddAuthorization();
 // Enregistrement des services en Singleton (données en mémoire)
 builder.Services.AddSingleton<DataService>();
 
+builder.Services.AddScoped<IUserStore, UserStore>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<ProductService>();
 

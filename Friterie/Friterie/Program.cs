@@ -12,6 +12,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Identity.Web;
 using MudBlazor.Services;
 using Serilog;
+using System.Net.Http.Headers;
 
 
 
@@ -76,7 +77,13 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-
+builder.Services.AddHttpClient("FriterieAPI", client =>
+{
+    client.BaseAddress = new Uri("https://localhost:5001/FriterieAPI");
+    client.DefaultRequestHeaders.Accept.Clear();
+    client.DefaultRequestHeaders.Accept.Add(
+        new MediaTypeWithQualityHeaderValue("application/json"));
+});
 
 var app = builder.Build();
 
@@ -94,24 +101,24 @@ if (!app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
-//Pour remettre l'authentification Azure, il faut faire la redirection dans le MainLayout.razor
-// Endpoint pour se connecter
-app.MapGet("/authentication/login", async (HttpContext context) =>
-{
-    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
-    {
-        RedirectUri = "/login"
-    });
-});
+////Pour remettre l'authentification Azure, il faut faire la redirection dans le MainLayout.razor
+//// Endpoint pour se connecter
+//app.MapGet("/authentication/login", async (HttpContext context) =>
+//{
+//    await context.ChallengeAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+//    {
+//        RedirectUri = "/login"
+//    });
+//});
 
-// Endpoint pour se déconnecter
-app.MapGet("/authentication/logout", async (HttpContext context) =>
-{
-    await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
-    {
-        RedirectUri = "/"
-    });
-});
+//// Endpoint pour se déconnecter
+//app.MapGet("/authentication/logout", async (HttpContext context) =>
+//{
+//    await context.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme, new AuthenticationProperties
+//    {
+//        RedirectUri = "/"
+//    });
+//});
 
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");

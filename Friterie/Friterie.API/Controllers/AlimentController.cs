@@ -17,11 +17,11 @@ public class AlimentsController : ControllerBase
     private readonly IConfiguration _configuration;
     private readonly IFriterieStore _FriterieStore;
     //https://localhost:5001/FriterieService/BDD/GetAliments
-    private const string GET_COUNT_ALIMENTS_BDD = "/FriterieService/BDD/GetCountAliments";
-    private const string GET_ALIMENTS_BDD = "/FriterieService/BDD/GetAliments";
-    private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieService/BDD/GetGroupesAliments";
+    private const string GET_COUNT_ALIMENTS_BDD = "/FriterieAPI/BDD/GetCountAliments";
+    private const string GET_ALIMENTS_BDD = "/FriterieAPI/BDD/GetAliments";
+    private const string GET_GROUPES_ALIMENTS_BDD = "/FriterieAPI/BDD/GetGroupesAliments";
 
-    private const string GET_ARTICLES_BDD = "/FriterieService/BDD/GetArticles";
+    private const string GET_ARTICLES_BDD = "/FriterieAPI/BDD/GetArticles";
 
     public AlimentsController(IConfiguration configuration, IFriterieStore FriterieStore)
     {

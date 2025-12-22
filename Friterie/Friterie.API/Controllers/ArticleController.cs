@@ -19,7 +19,7 @@ public class ArticleController : ControllerBase
     private readonly IFriterieStore _FriterieStore;
     //https://localhost:5001/FriterieService/BDD/GetAliments
 
-    private const string GET_PRODUCTS_BDD = "/FriterieService/BDD/GetProducts";
+    private const string GET_PRODUCTS_BDD = "/FriterieAPI/BDD/GetProducts";
 
 
     public ArticleController(IConfiguration configuration, IFriterieStore FriterieStore)

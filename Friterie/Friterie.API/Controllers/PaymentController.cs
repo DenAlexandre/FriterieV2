@@ -9,7 +9,7 @@ using System;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("FriterieAPI/api/[controller]")]
 public class PaymentController : ControllerBase
 {
     private readonly PaymentService _paymentService;

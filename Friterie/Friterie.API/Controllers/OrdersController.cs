@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("FriterieAPI/api/[controller]")]
 public class OrdersController : ControllerBase
 {
     private readonly OrderService _orderService;
