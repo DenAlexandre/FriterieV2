@@ -4,7 +4,7 @@
 @using Friterie.BlazorServer.Services
 @using Friterie.Services
 
-@inject ProductService ProductServiceView
+@inject ApiService APIServiceView
 @inject CartService CartService
 
 <PageTitle>Plats</PageTitle>
@@ -86,7 +86,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _burgers = await ProductServiceView.GetProductsAsync(CATEGORIE, 1000, 0);
+        _burgers = await APIServiceView.GetProductsAsync(CATEGORIE, 1000, 0);
 
         //FiltrerCategorie();
     }

@@ -42,9 +42,9 @@ builder.Services.AddSingleton<DataService>();
 
 builder.Services.AddScoped<IUserStore, UserStore>();
 builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<ProductService>();
 
-builder.Services.AddScoped<IFriterieStore, FriterieStore>();
+builder.Services.AddScoped<IProductStore, ProductStore>();
+builder.Services.AddScoped<ProductService>();
 
 builder.Services.AddScoped<IOrderStore, OrderStore>();
 builder.Services.AddScoped<OrderService>();

@@ -2,6 +2,7 @@
 
 
 using Friterie.Shared.Models;
+using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
@@ -9,6 +10,11 @@ public class ApiService
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly AuthStateService _authStateService;
+
+
+    private const string GET_PRODUCTS_BDD = "/FriterieAPI/api/products/GetProducts";
+    private const string GET_PRODUCTS_BY_CATEGORY_BDD = "/FriterieAPI/api/products/category";
+    private const string GET_PRODUCTS_BY_ID_BDD = "/FriterieAPI/api/products/";
 
     public ApiService(IHttpClientFactory httpClientFactory, AuthStateService authStateService)
     {
@@ -53,24 +59,31 @@ public class ApiService
 
     // ============= PRODUCTS =============
 
-    public async Task<List<Product>> GetProductsAsync()
+    public async Task<List<Product>> GetProductsAsync(int type, int limit, int offset)
     {
         var client = CreateClient();
-        var products = await client.GetFromJsonAsync<List<Product>>("FriterieAPI/api/products");
+
+        var requestUri = $"{GET_PRODUCTS_BDD}" + $"?type={type}&limit={limit}&offset={offset}";
+        var jsonResponse = await client.GetStringAsync(requestUri);
+
+        var products = JsonConvert.DeserializeObject<List<Product>>(jsonResponse);
+
+
+        //var products = await client.GetFromJsonAsync<List<Product>>(GET_PRODUCTS_BDD + "/"  + new { type, limit, offset });
         return products ?? new List<Product>();
     }
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string category)
     {
         var client = CreateClient();
-        var products = await client.GetFromJsonAsync<List<Product>>($"FriterieAPI/api/products/category/{category}");
+        var products = await client.GetFromJsonAsync<List<Product>>(GET_PRODUCTS_BY_CATEGORY_BDD + "/" + category);
         return products ?? new List<Product>();
     }
 
     public async Task<Product?> GetProductByIdAsync(int id)
     {
         var client = CreateClient();
-        return await client.GetFromJsonAsync<Product>($"FriterieAPI/api/products/{id}");
+        return await client.GetFromJsonAsync<Product>(GET_PRODUCTS_BY_ID_BDD + "/" + id);
     }
 
     // ============= ORDERS =============

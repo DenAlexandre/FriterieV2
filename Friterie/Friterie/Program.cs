@@ -42,8 +42,7 @@ builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStat
 //builder.Services.AddSingleton<UserAccountService>();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-builder.Services.AddSingleton<ProductService>();
-builder.Services.AddHostedService(provider => provider.GetRequiredService<ProductService>());
+
 
 
 

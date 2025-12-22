@@ -1,23 +1,35 @@
 ﻿namespace Friterie.API.Services;
 
- 
+using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using static Friterie.Shared.Models.EnumFriterie;
 
 public class ProductService
 {
-    private readonly DataService _dataService;
 
-    public ProductService(DataService dataService)
+    private readonly IProductStore _productStore;
+
+    public ProductService(IProductStore productStore)
     {
-        _dataService = dataService;
+        _productStore = productStore;
     }
 
-    public List<Product> GetAllProducts() => _dataService.GetAllProducts();
 
-    public List<Product> GetProductsByCategory(string category) =>
-        _dataService.GetAllProducts().Where(p => p.TypeProduct.TypeProductNom == category).ToList();
 
-    public Product? GetProductById(int id) => _dataService.GetProductById(id);
+
+    public async Task<List<Product>> GetAllProducts(int type, int limit , int offset) => await _productStore.GetProducts(type, limit, offset);
+
+    public async Task<List<Product>> GetProductsByCategory(string category)
+    {
+        var products = await _productStore.GetProducts((int)ProductTypeEnum.Burgers, 1000, 0);
+
+        return products
+            .Where(p => p.TypeProduct.TypeProductNom == category)
+            .ToList();
+    }
+
+    public async Task<Product?> GetProductById(int id) => await _productStore.GetProductById(id);
 }

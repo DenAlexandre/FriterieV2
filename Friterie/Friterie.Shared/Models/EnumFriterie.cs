@@ -7,6 +7,16 @@ namespace Friterie.Shared.Models
     public class EnumFriterie
     {
 
+        public enum ProductTypeEnum : ushort
+        {
+
+            Burgers = 1,
+            Viandes = 2,
+            Sauces = 10, //
+            Menus = 20, //
+
+
+        }
 
         public enum StatusTypeEnum : ushort
         {
