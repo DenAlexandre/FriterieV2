@@ -1,6 +1,6 @@
-﻿namespace Friterie.API.Models
+﻿namespace Friterie.Shared.Models
 {
-    public class GroupeAliment
+    public class GroupeArticle
     {
         public int TGroupeCode { get; set; }
         public string TGroupeNom { get; set; }

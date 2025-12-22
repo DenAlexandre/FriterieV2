@@ -1,0 +1,21 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Friterie.Shared.Models
+{
+    public class EnumFriterie
+    {
+
+
+        public enum StatusTypeEnum : ushort
+        {
+
+            Pending = 0,
+            Paid = 1, //
+            Completed = 2, //
+            Cancelled = 3,
+
+        }
+    }
+}

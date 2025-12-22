@@ -1,7 +1,6 @@
 ﻿namespace Friterie.API.Stores
 {
-    using Friterie.API.Models;
-
+    using Friterie.Shared.Models;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
@@ -17,11 +16,7 @@
 
     public class UserStore(IConfiguration configuration, ILogger<IUserStore> logger) : IUserStore
     {
-        private const string FN_GET_COUNT_ALIMENTS_BDD = "select * from friterie.fn_get_count_aliments";
-        private const string FN_GET_ALIMENTS_BDD = "select * from friterie.fn_get_aliments";
-        private const string FN_GET_GROUPE_ALIMENTS_BDD = "select * from friterie.fn_get_groupes_aliments";
 
-        private const string FN_GET_PRODUCTS_BDD = "select * from friterie.fn_get_products";
 
         #region variables
 

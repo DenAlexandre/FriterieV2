@@ -1,44 +1,51 @@
 ﻿namespace Friterie.API.Services;
 
-using Friterie.API.Models;
+ 
+using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using static Friterie.Shared.Models.EnumFriterie;
 
 public class OrderService
 {
-    private readonly DataService _dataService;
+    private readonly OrderStore _orderStore;
 
-    public OrderService(DataService dataService)
+    public OrderService(OrderStore orderStore)
     {
-        _dataService = dataService;
+        _orderStore = orderStore;
     }
 
-    public Order CreateOrder(int userId, List<OrderItem> items)
+    public async Task CreateOrder(int userId, List<OrderItem> items)
     {
-        var order = new Order
+        var order = new Orders
         {
-            UserId = userId,
-            Items = items,
-            TotalAmount = items.Sum(i => i.Price * i.Quantity),
-            OrderDate = DateTime.UtcNow,
-            Status = "Pending"
+            OrderUserId = userId,
+            //Items = items,
+            OrderTotal = items.Sum(i => i.OiPrice * i.OiQuantity),
+            OrderDatetime = DateTime.UtcNow,
+            OrderStatus = (int)StatusTypeEnum.Pending,
         };
 
         // Réduire le stock
         foreach (var item in items)
         {
-            _dataService.UpdateProductStock(item.ProductId, item.Quantity);
+
+
+
+            //TODO
+            //_orderService.UpdateOrderAsync(item.ProductId, item.Quantity);
         }
 
-        return _dataService.AddOrder(order);
+        await _orderStore.InsertOrderAsync(order);
     }
 
-    public Order? GetOrderById(int orderId) => _dataService.GetOrderById(orderId);
+    public Task<Orders?> GetOrderById(int orderId) => _orderStore.GetByIdOrderAsync(orderId);
 
-    public List<Order> GetUserOrders(int userId) => _dataService.GetUserOrders(userId);
+    public async Task<List<Orders>> GetOrders(int userId) => await _orderStore.GetAllOrdersAsync(userId, 0 , 0);
 
-    public bool UpdateOrderPaymentStatus(int orderId, bool isPaid, string paymentIntentId) =>
-        _dataService.UpdateOrderPaymentStatus(orderId, isPaid, paymentIntentId);
+    //public async Task<bool> UpdateOrderPaymentStatus(Orders order) =>
+    //    await _orderStore.UpdateOrderAsync(order);
 }

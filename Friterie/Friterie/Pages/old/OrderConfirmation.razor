@@ -1,4 +1,5 @@
 ﻿@page "/order-confirmation/{OrderId:int}"
+ 
 @using Friterie.BlazorServer.Services
 @inject ApiService ApiService
 @inject NavigationManager Navigation
@@ -30,7 +31,7 @@
                                     <div class="card-body">
                                         <i class="bi bi-calendar-check fs-4 text-primary mb-2"></i>
                                         <p class="mb-1 text-muted small">Date</p>
-                                        <strong>@order.OrderDate.ToString("dd/MM/yyyy HH:mm")</strong>
+                                        <strong>@order.OrderDatetime.ToString("dd/MM/yyyy HH:mm")</strong>
                                     </div>
                                 </div>
                             </div>
@@ -39,7 +40,7 @@
                                     <div class="card-body">
                                         <i class="bi bi-currency-euro fs-4 text-success mb-2"></i>
                                         <p class="mb-1 text-muted small">Total</p>
-                                        <strong class="fs-5">@order.TotalAmount.ToString("C")</strong>
+                                        <strong class="fs-5">@order.OrderTotal.ToString("C")</strong>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +48,7 @@
 
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-2"></i>
-                            <strong>Statut:</strong> @order.Status
+                            <strong>Statut:</strong> @order.OrderStatus
                         </div>
 
                         <div class="card mb-4">
@@ -58,8 +59,8 @@
                                 @foreach (var item in order.Items)
                                 {
                                     <div class="d-flex justify-content-between mb-2">
-                                        <span>@item.ProductName x @item.Quantity</span>
-                                        <strong>@((item.Price * item.Quantity).ToString("C"))</strong>
+                                        <span>@item.OiProductName x @item.OiQuantity</span>
+                                        <strong>@((item.OiPrice * item.OiQuantity).ToString("C"))</strong>
                                     </div>
                                 }
                             </div>
@@ -89,7 +90,7 @@
     [Parameter]
     public int OrderId { get; set; }
 
-    private Order? order;
+    private Orders? order;
 
     protected override async Task OnInitializedAsync()
     {

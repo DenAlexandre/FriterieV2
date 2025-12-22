@@ -1,4 +1,4 @@
-using Friterie.API.Models;
+ 
 using Friterie.API.Stores;
 using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
@@ -24,7 +24,7 @@ namespace Friterie.API.TestsUnits.Stores
         private OrderStore OrderStore = new(_config, _logger);
 
 
-
+        #region OrderStoreTest
 
 
         [Fact]
@@ -39,10 +39,11 @@ namespace Friterie.API.TestsUnits.Stores
         [Fact]
         public async Task GetAllOrdersAsync()
         {
+            int userid = 2;
             int limit = 100;
             int offset = 0;
 
-            var list = await OrderStore.GetAllOrdersAsync(limit, offset);
+            var list = await OrderStore.GetAllOrdersAsync(userid, limit, offset);
 
             Assert.NotEqual(0, list.Count);
         }
@@ -96,5 +97,88 @@ namespace Friterie.API.TestsUnits.Stores
             };
             await OrderStore.UpdateOrderAsync(entity);
         }
+
+
+        #endregion
+
+
+
+        #region orderItem
+
+
+
+        [Fact]
+        public async Task DeleteOrderItemAsync()
+        {
+            int user_id = 1;
+
+            await OrderStore.DeleteOrderItemAsync(user_id);
+        }
+
+
+        [Fact]
+        public async Task GetAllOrderItemAsync()
+        {
+            int limit = 100;
+            int offset = 0;
+
+            var list = await OrderStore.GetAllOrderItemAsync(limit, offset);
+
+            Assert.NotEqual(0, list.Count);
+        }
+
+
+        [Fact]
+        public async Task GetOrderItemByIdAsync()
+        {
+            int user_id = 2;
+            var list = await OrderStore.GetOrderItemByIdAsync(user_id);
+
+            //Assert.Equal(user_id, list.OrderId);
+        }
+
+
+        [Fact]
+        public async Task InsertOrderItemAsync()
+        {
+            //call friterie.sp_insert_orders(7,now()::timestamp without time zone, 25.50, 2,'',true);
+            OrderItem entity = new OrderItem
+            {
+                OiId = 0,
+                OiProductId = 3,
+                OiProductName = "Test Product",
+                OiQuantity = 2,
+                OiPrice = 12.75m,
+                OiOrderId = 5,
+            };
+            await OrderStore.InsertOrderItemAsync(entity);
+
+
+
+        }
+
+        [Fact]
+        public async Task UpdateOrderItemAsync()
+        {
+
+
+
+            OrderItem entity = new OrderItem
+            {
+                OiId = 0,
+                OiProductId = 3,
+                OiProductName = "Test Product",
+                OiQuantity = 2,
+                OiPrice = 12.75m,
+                OiOrderId = 5,
+            };
+            await OrderStore.UpdateOrderItemAsync(entity);
+        }
+
+
+        #endregion
+
+
+
     }
 }

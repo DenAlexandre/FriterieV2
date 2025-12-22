@@ -1,6 +1,6 @@
 ﻿namespace Friterie.API.Services;
 
-using Friterie.API.Models;
+ 
 using Friterie.Shared.Models;
 using System;
 using System.Collections.Concurrent;
@@ -11,7 +11,7 @@ public class DataService
 {
     private readonly ConcurrentDictionary<int, User> _users = new();
     private readonly ConcurrentDictionary<int, Product> _products = new();
-    private readonly ConcurrentDictionary<int, Order> _orders = new();
+    //private readonly ConcurrentDictionary<int, Order> _orders = new();
 
     private int _userIdCounter = 1;
     private int _productIdCounter = 1;
@@ -148,27 +148,27 @@ public class DataService
     }
 
     // Orders
-    public Order AddOrder(Order order)
-    {
-        order.Id = _orderIdCounter++;
-        _orders[order.Id] = order;
-        return order;
-    }
+    //public Order AddOrder(Order order)
+    //{
+    //    order.Id = _orderIdCounter++;
+    //    _orders[order.Id] = order;
+    //    return order;
+    //}
 
-    public Order? GetOrderById(int id) => _orders.GetValueOrDefault(id);
+    //public Order? GetOrderById(int id) => _orders.GetValueOrDefault(id);
 
-    public List<Order> GetUserOrders(int userId) =>
-        _orders.Values.Where(o => o.UserId == userId).OrderByDescending(o => o.OrderDate).ToList();
+    //public List<Order> GetUserOrders(int userId) =>
+    //    _orders.Values.Where(o => o.UserId == userId).OrderByDescending(o => o.OrderDate).ToList();
 
-    public bool UpdateOrderPaymentStatus(int orderId, bool isPaid, string paymentIntentId)
-    {
-        if (_orders.TryGetValue(orderId, out var order))
-        {
-            order.IsPaid = isPaid;
-            order.Status = isPaid ? "Paid" : "Pending";
-            order.PaymentIntentId = paymentIntentId;
-            return true;
-        }
-        return false;
-    }
+    //public bool UpdateOrderPaymentStatus(int orderId, bool isPaid, string paymentIntentId)
+    //{
+    //    if (_orders.TryGetValue(orderId, out var order))
+    //    {
+    //        order.IsPaid = isPaid;
+    //        order.Status = isPaid ? "Paid" : "Pending";
+    //        order.PaymentIntentId = paymentIntentId;
+    //        return true;
+    //    }
+    //    return false;
+    //}
 }

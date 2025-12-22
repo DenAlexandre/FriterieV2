@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Identity.Web;
-using Microsoft.OpenApi.Models;
 using MudBlazor.Services;
 using Serilog;
 

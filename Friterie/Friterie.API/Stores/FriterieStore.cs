@@ -1,6 +1,6 @@
 ﻿namespace Friterie.API.Stores
 {
-    using Friterie.API.Models;
+     
     using Friterie.Shared.Models;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;

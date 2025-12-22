@@ -130,17 +130,17 @@
             // Créer la commande
             var items = cartItems.Select(i => new OrderItem
             {
-                ProductId = i.ProductId,
-                ProductName = i.ProductName,
-                Quantity = i.Quantity,
-                Price = i.Price
+                OiProductId = i.ProductId,
+                OiProductName = i.ProductName,
+                OiQuantity = i.Quantity,
+                OiPrice = i.Price
             }).ToList();
 
             var order = await ApiService.CreateOrderAsync(items);
 
             if (order != null)
             {
-                orderId = order.Id;
+                orderId = order.OrderId;
 
                 // Créer le PaymentIntent
                 var paymentIntent = await ApiService.CreatePaymentIntentAsync(totalAmount);

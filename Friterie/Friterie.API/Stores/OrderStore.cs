@@ -1,13 +1,12 @@
 ﻿namespace Friterie.API.Stores
 {
-    using Friterie.API.Models;
-
+    using Friterie.Shared.Models;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.Logging;
 
     using Npgsql;
     using NpgsqlTypes;
-     
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -32,6 +31,9 @@
 
         #endregion
 
+
+
+        #region Order
 
         // =======================
         // GET BY ID
@@ -64,7 +66,7 @@
         // =======================
         // GET ALL (pagination)
         // =======================
-        public async Task<List<Orders>> GetAllOrdersAsync(int limit, int offset)
+        public async Task<List<Orders>> GetAllOrdersAsync(int userId, int limit, int offset)
         {
             var result = new List<Orders>();
 
@@ -119,7 +121,7 @@
         // =======================
         // UPDATE
         // =======================
-        public async Task UpdateOrderAsync(Orders entity)
+        public async Task<bool> UpdateOrderAsync(Orders entity)
         {
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -136,6 +138,8 @@
             cmd.Parameters.AddWithValue("p_order_is_paid", (object?)entity.OrderIsPaid ?? DBNull.Value);
 
             await cmd.ExecuteNonQueryAsync();
+
+            return true;
         }
 
         // =======================
@@ -154,24 +158,136 @@
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // =======================
-        // MAPPING
-        // =======================
-        private static Orders Map(NpgsqlDataReader reader) => new Orders
-        {
-            OrderId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
-            OrderUserId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
-            OrderDatetime = reader.IsDBNull(2) ? default : reader.GetDateTime(2),
-            OrderTotal = reader.IsDBNull(3) ? default : reader.GetDecimal(3),
-            OrderStatus = reader.IsDBNull(4) ? default : reader.GetInt32(4),
-            OrderIntentId = reader.IsDBNull(5) ? default : reader.GetString(5),
-            OrderIsPaid = reader.IsDBNull(6) ? default : reader.GetBoolean(6)
-        };
 
-        private static string ToPascal(string name) => string.Concat(name.Split('_').Select(s => char.ToUpper(s[0]) + s[1..]));
+
+
+        #endregion
+
+
+        #region Order Item
+
+
+        // =======================
+        // GET BY ID
+        // =======================
+        public async Task<OrderItem?> GetOrderItemByIdAsync(int oi_id)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = "SELECT * FROM friterie.fn_get_order_item_by_id(@p_oi_id)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue($"p_oi_id", NpgsqlDbType.Integer, oi_id);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            if (!await reader.ReadAsync()) return null;
+
+            return new OrderItem
+            {
+                OiId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
+                OiProductId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
+                OiProductName = reader.IsDBNull(2) ? default : reader.GetString(2),
+                OiQuantity = reader.IsDBNull(3) ? default : reader.GetInt32(3),
+                OiPrice = reader.IsDBNull(4) ? default : reader.GetDecimal(4),
+                OiOrderId = reader.IsDBNull(5) ? default : reader.GetInt32(5)
+            };
+        }
+
+        // =======================
+        // GET ALL (pagination)
+        // =======================
+        public async Task<List<OrderItem>> GetAllOrderItemAsync(int limit, int offset)
+        {
+            var result = new List<OrderItem>();
+
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = "SELECT * FROM friterie.fn_get_order_item(@p_limit, @p_offset)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("p_limit", NpgsqlDbType.Integer, limit);
+            cmd.Parameters.AddWithValue("p_offset", NpgsqlDbType.Integer, offset);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                result.Add(new OrderItem
+                {
+                    OiId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
+                    OiProductId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
+                    OiProductName = reader.IsDBNull(2) ? default : reader.GetString(2),
+                    OiQuantity = reader.IsDBNull(3) ? default : reader.GetInt32(3),
+                    OiPrice = reader.IsDBNull(4) ? default : reader.GetDecimal(4),
+                    OiOrderId = reader.IsDBNull(5) ? default : reader.GetInt32(5)
+                });
+            }
+
+            return result;
+        }
+
+        // =======================
+        // INSERT
+        // =======================
+        public async Task InsertOrderItemAsync(OrderItem entity)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = "CALL friterie.sp_insert_order_item(@p_oi_product_id, @p_oi_product_name, @p_oi_quantity, @p_oi_price, @p_oi_order_id)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("p_oi_product_id", (object?)entity.OiProductId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_product_name", (object?)entity.OiProductName ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_quantity", (object?)entity.OiQuantity ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_price", (object?)entity.OiPrice ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_order_id", (object?)entity.OiOrderId ?? DBNull.Value);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        // =======================
+        // UPDATE
+        // =======================
+        public async Task UpdateOrderItemAsync(OrderItem entity)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = "CALL friterie.sp_update_order_item(@p_oi_id, @p_oi_product_id, @p_oi_product_name, @p_oi_quantity, @p_oi_price, @p_oi_order_id)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("p_oi_id", (object?)entity.OiId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_product_id", (object?)entity.OiProductId ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_product_name", (object?)entity.OiProductName ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_quantity", (object?)entity.OiQuantity ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_price", (object?)entity.OiPrice ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_oi_order_id", (object?)entity.OiOrderId ?? DBNull.Value);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+        // =======================
+        // DELETE
+        // =======================
+        public async Task DeleteOrderItemAsync(int oi_id)
+        {
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = "CALL friterie.sp_delete_order_item(@p_oi_id)";
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue($"p_oi_id", oi_id);
+
+            await cmd.ExecuteNonQueryAsync();
+        }
+
+
+        #endregion
 
 
     }
 }
-
 

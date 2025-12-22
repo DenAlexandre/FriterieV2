@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Friterie.API.Models
+namespace Friterie.Shared.Models
 {
     public class Orders
     {
@@ -11,5 +11,7 @@ namespace Friterie.API.Models
         public int OrderStatus { get; set; }
         public string OrderIntentId { get; set; }
         public bool OrderIsPaid { get; set; }
+
+        public List<OrderItem> Items { get; set; } = new List<OrderItem>();
     }
 }

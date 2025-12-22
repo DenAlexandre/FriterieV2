@@ -49,7 +49,7 @@ public class PaymentController : ControllerBase
 
             if (isConfirmed)
             {
-                _orderService.UpdateOrderPaymentStatus(dto.OrderId, true, dto.PaymentIntentId);
+                //_orderService.UpdateOrderPaymentStatus(dto.OrderId, true, dto.PaymentIntentId);
                 return Ok(new { success = true, message = "Paiement confirmé avec succès" });
             }
 

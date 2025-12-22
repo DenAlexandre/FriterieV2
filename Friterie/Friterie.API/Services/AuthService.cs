@@ -1,6 +1,6 @@
 ﻿namespace Friterie.API.Services;
 
-using Friterie.API.Models;
+using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;

@@ -49,7 +49,7 @@ public class OrdersController : ControllerBase
             return Unauthorized();
 
         var userId = int.Parse(userIdClaim);
-        var orders = _orderService.GetUserOrders(userId);
+        var orders = _orderService.GetOrders(userId);
 
         return Ok(orders);
     }

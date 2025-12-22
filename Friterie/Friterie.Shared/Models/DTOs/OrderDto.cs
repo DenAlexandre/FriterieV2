@@ -1,5 +1,4 @@
-﻿namespace Friterie.API.DTOs;
-
+﻿
 
 using Friterie.Shared.Models;
 using System.Collections.Generic;

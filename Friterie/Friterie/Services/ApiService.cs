@@ -1,13 +1,9 @@
 ﻿namespace Friterie.BlazorServer.Services;
 
-using Friterie.Shared.Models;
 
-//using Friterie.API.Models;
+using Friterie.Shared.Models;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-//using Order = Shared.Models.Order;
-//using OrderItem = Shared.Models.OrderItem;
-//using Product = Shared.Models.Product;
 
 public class ApiService
 {
@@ -79,29 +75,29 @@ public class ApiService
 
     // ============= ORDERS =============
 
-    public async Task<Order?> CreateOrderAsync(List<OrderItem> items)
+    public async Task<Orders?> CreateOrderAsync(List<OrderItem> items)
     {
         var client = CreateClient();
         var response = await client.PostAsJsonAsync("/api/orders", new { items });
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<Order>();
+            return await response.Content.ReadFromJsonAsync<Orders>();
         }
         return null;
     }
 
-    public async Task<Order?> GetOrderAsync(int orderId)
+    public async Task<Orders?> GetOrderAsync(int orderId)
     {
         var client = CreateClient();
-        return await client.GetFromJsonAsync<Order>($"/api/orders/{orderId}");
+        return await client.GetFromJsonAsync<Orders>($"/api/orders/{orderId}");
     }
 
-    public async Task<List<Order>> GetUserOrdersAsync()
+    public async Task<List<Orders>> GetUserOrdersAsync()
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Order>>("/api/orders/user");
-        return orders ?? new List<Order>();
+        var orders = await client.GetFromJsonAsync<List<Orders>>("/api/orders/user");
+        return orders ?? new List<Orders>();
     }
 
     // ============= PAYMENT =============
