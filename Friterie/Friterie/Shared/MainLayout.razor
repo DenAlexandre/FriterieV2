@@ -17,13 +17,17 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+@*             <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a> *@
                 
             <AuthorizeView>
                 <Authorized Context="auth">
-                
-                    <a @onclick="Logout" href="javascript:void(0)">Logout</a> 
-                    <span><br />Bonjour @auth.User.Identity?.Name</span>
+                    <div class="d-flex flex-column align-items-start">
+                        <small class="text-muted">
+                            Bonjour @auth.User.Identity?.Name
+                        </small>
+                        <a @onclick="Logout" href="javascript:void(0)">Logout</a>
+
+                    </div>
                     @* <a href="/authentication/logout">Logout</a> *@
                     @* <a href="/logout">Logout</a> *@
                 </Authorized>

@@ -2,6 +2,7 @@
 
 using Friterie.API.DTOs;
 using Friterie.API.Services;
+using Friterie.Shared.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -38,13 +39,25 @@ public class AuthController : ControllerBase
         return Ok(new
         {
             token,
-            user = new
+            user = new User
             {
-                user.UserId,
-                user.Email,
-                user.FirstName,
-                user.LastName
+                UserId = user.UserId,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                Address = user.Address,
+                RoleId = user.RoleId,
+                RoleName = user.RoleName
             }
+
+            //user = new
+            //{
+            //    user.UserId,
+            //    user.Email,
+            //    user.FirstName,
+            //    user.LastName
+            //}
         });
     }
 }

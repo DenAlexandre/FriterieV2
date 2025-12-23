@@ -84,8 +84,9 @@
                 {
                     new Claim(ClaimTypes.Name, response.User.FirstName), // 👈 Denis
                     new Claim(ClaimTypes.Email, response.User.Email),
-                    new Claim(ClaimTypes.Role, response.User.RoleName)
                 };
+
+                claims.Add(new Claim(ClaimTypes.Role, response.User.RoleName));
 
                 // foreach (var role in response.R)
                 // {
@@ -94,7 +95,7 @@
 
                 provider.SignIn(response.User.FirstName, claims);
 
-                Navigation.NavigateTo("/");
+                Navigation.NavigateTo("/products");
             }
             else
             {

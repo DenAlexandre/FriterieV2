@@ -12,6 +12,8 @@ public class ApiService
     private readonly AuthStateService _authStateService;
 
 
+    private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
+
     private const string GET_PRODUCTS_BDD = "/FriterieAPI/api/products/GetProducts";
     private const string GET_PRODUCTS_BY_CATEGORY_BDD = "/FriterieAPI/api/products/category";
     private const string GET_PRODUCTS_BY_ID_BDD = "/FriterieAPI/api/products/";
@@ -41,7 +43,8 @@ public class ApiService
     public async Task<LoginResponse?> LoginAsync(string email, string password)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("FriterieAPI/api/auth/login", new { email, password });
+
+        var response = await client.PostAsJsonAsync(GET_LOGIN_BDD, new { email, password });
 
         if (response.IsSuccessStatusCode)
         {
@@ -140,17 +143,17 @@ public class ApiService
 public class LoginResponse
 {
     public string Token { get; set; } = string.Empty;
-    public UserInfoServer User { get; set; } = new();
+    public User User { get; set; } = new();
 }
 
-public class UserInfoServer
-{
-    public int Id { get; set; }
-    public string Email { get; set; } = string.Empty;
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public string RoleName { get; set; } = string.Empty;
-}
+//public class UserInfoServer
+//{
+//    public int Id { get; set; }
+//    public string Email { get; set; } = string.Empty;
+//    public string FirstName { get; set; } = string.Empty;
+//    public string LastName { get; set; } = string.Empty;
+//    public string RoleName { get; set; } = string.Empty;
+//}
 
 public class RegisterRequest
 {

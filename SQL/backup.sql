@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
 -- Dumped by pg_dump version 17.0
 
--- Started on 2025-12-23 08:40:55
+-- Started on 2025-12-23 09:09:27
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -4089,8 +4089,8 @@ INSERT INTO friterie.products VALUES (2, 'Montagnard', 'Montagnard', 9.45, 'img/
 -- Data for Name: roles; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
 
-INSERT INTO friterie.roles VALUES (1, 'Admin');
 INSERT INTO friterie.roles VALUES (2, 'User');
+INSERT INTO friterie.roles VALUES (1, 'Administrator');
 
 
 --
@@ -4210,7 +4210,7 @@ ALTER TABLE ONLY friterie.users
     ADD CONSTRAINT users_pk PRIMARY KEY (user_id);
 
 
--- Completed on 2025-12-23 08:40:56
+-- Completed on 2025-12-23 09:09:28
 
 --
 -- PostgreSQL database dump complete

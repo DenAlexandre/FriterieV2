@@ -1,17 +1,19 @@
-﻿namespace Friterie.BlazorServer.Services;
+﻿using Friterie.Shared.Models;
+
+namespace Friterie.BlazorServer.Services;
 
 public class AuthStateService
 {
     private string? _token;
-    private UserInfoServer? _currentUser;
+    private User? _currentUser;
 
     public event Action? OnAuthStateChanged;
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(_token);
 
-    public UserInfoServer? CurrentUser => _currentUser;
+    public User? CurrentUser => _currentUser;
 
-    public void Login(string token, UserInfoServer user)
+    public void Login(string token, User user)
     {
         _token = token;
         _currentUser = user;
