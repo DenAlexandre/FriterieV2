@@ -1,5 +1,6 @@
 ﻿@page "/products"
 @using Friterie.BlazorServer.Services
+@using Friterie.Context
 @using Friterie.Shared.Models
 @using static Friterie.Shared.Models.EnumFriterie
 @inject ApiService ApiService
@@ -12,7 +13,7 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>🍔 Notre Carte</h2>
-        <button class="btn btn-primary position-relative" @onclick='() => Navigation.NavigateTo("/cart")'>
+        <button class="btn btn-primary position-relative" @onclick="() => GoToPanier()">
             <i class="bi bi-cart3"></i> Panier
             @if (CartService.GetItemCount() > 0)
             {
@@ -106,6 +107,10 @@
 </div>
 
 @code {
+
+    // [Parameter] public int OrderId { get; set; }
+    public OrderContext OrderContext { get; set; } = new();
+
     private List<Product> _products = new();
     private ProductTypeEnum selectedCategory = ProductTypeEnum.All;
     private bool isLoading = true;
@@ -130,7 +135,7 @@
         }
         catch (Exception ex)
         {
-            
+
         }
         finally
         {
@@ -143,8 +148,16 @@
         selectedCategory = category;
     }
 
+    private void GoToPanier()
+    {
+        // OrderContext.OrderId = OrderId;
+        Navigation.NavigateTo("/order-detail");
+    }
+
+
     private void AddToCart(Product product)
     {
+
         CartService.AddItem(product);
     }
 

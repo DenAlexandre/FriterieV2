@@ -2,6 +2,6 @@
 {
     public class OrderContext
     {
-        public int OrderId { get; set; }
+        public int OrderId { get; set; } = 0;
     }
 }
