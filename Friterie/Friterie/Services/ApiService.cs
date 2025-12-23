@@ -14,6 +14,12 @@ public class ApiService
 
     private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
 
+    private const string REMOVE_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/remove-product";
+    private const string ADD_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/add-product";
+    private const string ADD_ITEMS_IN_ORDER = "FriterieAPI/api/add-items-in-order";
+
+
+
     private const string GET_PRODUCTS_BDD = "/FriterieAPI/api/products/GetProducts";
     private const string GET_PRODUCTS_BY_CATEGORY_BDD = "/FriterieAPI/api/products/category";
     private const string GET_PRODUCTS_BY_ID_BDD = "/FriterieAPI/api/products/";
@@ -39,7 +45,7 @@ public class ApiService
     }
 
     // ============= AUTH =============
-
+    #region Auth
     public async Task<LoginResponse?> LoginAsync(string email, string password)
     {
         var client = CreateClient();
@@ -59,6 +65,10 @@ public class ApiService
         var response = await client.PostAsJsonAsync("FriterieAPI/api/auth/register", request);
         return response.IsSuccessStatusCode;
     }
+    #endregion
+
+
+    #region Products
 
     // ============= PRODUCTS =============
 
@@ -89,7 +99,51 @@ public class ApiService
         return await client.GetFromJsonAsync<Product>(GET_PRODUCTS_BY_ID_BDD + "/" + id);
     }
 
+    #endregion
+
+
+    #region orders
     // ============= ORDERS =============
+
+
+    public async Task RemoveProductInOrderAsync(int orderId, int productId)
+    {
+        var client = CreateClient();
+        var response = await client.PostAsJsonAsync(REMOVE_PRODUCT_IN_ORDER, new { orderId, productId });
+
+        if (response.IsSuccessStatusCode)
+        {
+            //return await response.Content.ReadFromJsonAsync<Orders>();
+        }
+        //return null;
+    }
+
+    public async Task AddProductInOrderIdAsync(int orderId, int  productId, int quantity)
+    {
+        var client = CreateClient();
+        var response = await client.PostAsJsonAsync(ADD_PRODUCT_IN_ORDER, new { orderId, productId, quantity });
+
+        if (response.IsSuccessStatusCode)
+        {
+            //return await response.Content.ReadFromJsonAsync<Orders>();
+        }
+        //return null;
+    }
+
+
+
+    public async Task<Orders?> CreateItemsInOrderAsync(List<OrderItem> items)
+    {
+        var client = CreateClient();
+        var response = await client.PostAsJsonAsync(ADD_ITEMS_IN_ORDER, new { items });
+
+        if (response.IsSuccessStatusCode)
+        {
+            return await response.Content.ReadFromJsonAsync<Orders>();
+        }
+        return null;
+    }
+
 
     public async Task<Orders?> CreateOrderAsync(List<OrderItem> items)
     {
@@ -115,7 +169,10 @@ public class ApiService
         var orders = await client.GetFromJsonAsync<List<Orders>>("FriterieAPI/api/orders/user");
         return orders ?? new List<Orders>();
     }
+    #endregion
 
+
+    #region payment
     // ============= PAYMENT =============
 
     public async Task<PaymentIntentResponse?> CreatePaymentIntentAsync(decimal amount)
@@ -136,6 +193,8 @@ public class ApiService
         var response = await client.PostAsJsonAsync("FriterieAPIapi/payment/confirm", new { orderId, paymentIntentId });
         return response.IsSuccessStatusCode;
     }
+
+    #endregion
 }
 
 // ============= DTOs =============

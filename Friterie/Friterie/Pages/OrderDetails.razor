@@ -1,6 +1,7 @@
 ﻿@using Friterie.BlazorServer.Services
 @using Friterie.Context
 @using Friterie.Shared.Models
+@using static Friterie.Shared.Models.EnumFriterie
 @inject ApiService Api
 
 <h3>Commande @OrderContext.OrderId</h3>
@@ -84,14 +85,14 @@ else
     {
         // Charger la commande et les produits via API
         Order = await Api.GetOrderAsync(OrderContext.OrderId);
-        Products = await Api.GetProductsAsync();
+        Products = await Api.GetProductsAsync((int)ProductTypeEnum.All, 10000, 0);
     }
 
     private async Task Add()
     {
         if (SelectedProductId == 0) return;
 
-        await Api.AddProductAsync(OrderContext.OrderId, SelectedProductId, Quantity);
+        await Api.AddProductInOrderIdAsync(OrderContext.OrderId, SelectedProductId, Quantity);
         Order = await Api.GetOrderAsync(OrderContext.OrderId);
 
         SelectedProductId = 0;
@@ -100,7 +101,7 @@ else
 
     private async Task Remove(int productId)
     {
-        await Api.RemoveProductAsync(OrderContext.OrderId, productId);
+        await Api.RemoveProductInOrderAsync(OrderContext.OrderId, productId);
         Order = await Api.GetOrderAsync(OrderContext.OrderId);
     }
 }
