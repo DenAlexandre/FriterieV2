@@ -1,7 +1,8 @@
 ﻿@page "/login"
 @using Friterie.BlazorServer.Services
+@using System.Security.Claims
 @inject ApiService ApiService
-@inject AuthStateService AuthState
+@inject AuthenticationStateProvider AuthProvider
 @inject NavigationManager Navigation
 
 <PageTitle>Connexion - Friterie</PageTitle>
@@ -71,12 +72,29 @@
 
         try
         {
+
+
             var response = await ApiService.LoginAsync(email, password);
 
             if (response != null)
             {
-                AuthState.Login(response.Token, response.User);
-                Navigation.NavigateTo("/products");
+                var provider = (CustomAuthenticationStateProvider)AuthProvider;
+
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, response.User.FirstName), // 👈 Denis
+                    new Claim(ClaimTypes.Email, response.User.Email),
+                    new Claim(ClaimTypes.Role, response.User.RoleName)
+                };
+
+                // foreach (var role in response.R)
+                // {
+                //     claims.Add(new Claim(ClaimTypes.Role, role));
+                // }
+
+                provider.SignIn(response.User.FirstName, claims);
+
+                Navigation.NavigateTo("/");
             }
             else
             {

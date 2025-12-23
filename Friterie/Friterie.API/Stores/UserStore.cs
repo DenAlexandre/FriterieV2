@@ -52,7 +52,9 @@
                 LastName = reader.IsDBNull(4) ? default : reader.GetString(4),
                 PhoneNumber = reader.IsDBNull(5) ? default : reader.GetString(5),
                 Address = reader.IsDBNull(6) ? default : reader.GetString(6),
-                Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7)
+                Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7),
+                RoleId = reader.IsDBNull(8) ? default : reader.GetInt32(8),
+                RoleName = reader.IsDBNull(9) ? default : reader.GetString(9),
             };
         }
 
@@ -81,7 +83,9 @@
                 LastName = reader.IsDBNull(4) ? default : reader.GetString(4),
                 PhoneNumber = reader.IsDBNull(5) ? default : reader.GetString(5),
                 Address = reader.IsDBNull(6) ? default : reader.GetString(6),
-                Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7)
+                Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7),
+                RoleId = reader.IsDBNull(8) ? default : reader.GetInt32(8),
+                RoleName = reader.IsDBNull(9) ? default : reader.GetString(9),
             };
         }
 
@@ -113,7 +117,9 @@
                     LastName = reader.IsDBNull(4) ? default : reader.GetString(4),
                     PhoneNumber = reader.IsDBNull(5) ? default : reader.GetString(5),
                     Address = reader.IsDBNull(6) ? default : reader.GetString(6),
-                    Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7)
+                    Created = reader.IsDBNull(7) ? default : reader.GetDateTime(7),
+                    RoleId = reader.IsDBNull(8) ? default : reader.GetInt32(8),
+                    RoleName = reader.IsDBNull(9) ? default : reader.GetString(9),
                 });
             }
 
@@ -128,7 +134,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.sp_insert_users(@p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created);";
+            var sql = "CALL friterie.sp_insert_users(@p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created, @p_role_id);";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_email", (object?)entity.Email ?? DBNull.Value);
@@ -138,6 +144,7 @@
             cmd.Parameters.AddWithValue("p_phone_number", (object?)entity.PhoneNumber ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_address", (object?)entity.Address ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_created", NpgsqlDbType.Timestamp, DateTime.SpecifyKind(entity.Created, DateTimeKind.Unspecified));
+            cmd.Parameters.AddWithValue("p_role_id", (object?)entity.RoleId ?? DBNull.Value);
             await cmd.ExecuteNonQueryAsync();
         }
 
@@ -155,7 +162,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.sp_update_users(@p_user_id, @p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created)";
+            var sql = "CALL friterie.sp_update_users(@p_user_id, @p_email, @p_password, @p_first_name, @p_last_name, @p_phone_number, @p_address, @p_created, @p_role_id)";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_user_id", (object?)entity.UserId ?? DBNull.Value);
@@ -166,6 +173,7 @@
             cmd.Parameters.AddWithValue("p_phone_number", (object?)entity.PhoneNumber ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_address", (object?)entity.Address ?? DBNull.Value);
             cmd.Parameters.AddWithValue("p_created", NpgsqlDbType.Timestamp, DateTime.SpecifyKind(entity.Created, DateTimeKind.Unspecified));
+            cmd.Parameters.AddWithValue("p_role_id", (object?)entity.RoleId ?? DBNull.Value);
 
             await cmd.ExecuteNonQueryAsync();
         }

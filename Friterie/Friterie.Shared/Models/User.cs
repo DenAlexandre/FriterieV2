@@ -13,5 +13,9 @@ namespace Friterie.Shared.Models
         public string PhoneNumber { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public DateTime Created { get; set; } = DateTime.UtcNow;
+
+        public int RoleId { get; set; }
+        public string RoleName { get; set; } = string.Empty;
+        
     }
 }

@@ -53,12 +53,12 @@
             await js.InvokeVoidAsync("alert", "Invalid user Name or password");
             return;
         }
-        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-        await customAuthStateProvider.UpdateAuthenticationState(new UserSession
-            {
-                UserName = model.UserName,
-                Role = model.Role,
-            });
+        // var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        // await customAuthStateProvider.UpdateAuthenticationState(new UserSession
+        //     {
+        //         UserName = model.UserName,
+        //         Role = model.Role,
+        //     });
         // true, indicates that the navigation should be done with a full page refresh.
         navManager.NavigateTo("/", true);
     }

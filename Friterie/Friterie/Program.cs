@@ -27,7 +27,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationCore();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
