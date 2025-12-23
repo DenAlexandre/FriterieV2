@@ -133,7 +133,7 @@
                 OiProductId = i.ProductId,
                 OiProductName = i.ProductName,
                 OiQuantity = i.Quantity,
-                OiPrice = i.Price
+                OiPrice = i.Price,
             }).ToList();
 
             var order = await ApiService.CreateOrderAsync(items);

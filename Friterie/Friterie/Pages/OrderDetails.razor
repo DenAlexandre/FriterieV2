@@ -1,0 +1,106 @@
+﻿@using Friterie.BlazorServer.Services
+@using Friterie.Context
+@using Friterie.Shared.Models
+@inject ApiService Api
+
+<h3>Commande @OrderContext.OrderId</h3>
+
+@if (Order == null)
+{
+    <p>Chargement...</p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Produit</th>
+                <th>Type</th>
+                <th>Prix</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Order.Items)
+            {
+                <tr>
+                    <td>@item.OiProductName</td>
+                    <td>@item.TypeProductName</td>
+                    <td>@item.OiPrice €</td>
+                    <td>@item.OiQuantity</td>
+                    <td>@(item.OiPrice* item.OiQuantity) €</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                                @onclick="() => Remove(item.OiProductId)">
+                            Supprimer
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="fw-bold text-end">
+        Total : @Order.OrderTotal €
+    </div>
+
+    <hr />
+
+    <h5>Ajouter un produit</h5>
+
+    <div class="row g-2 align-items-end">
+        <div class="col-5">
+            <select class="form-select" @bind="SelectedProductId">
+                <option value="0">-- Sélectionner un produit --</option>
+                @foreach (var p in Products)
+                {
+                    <option value="@p.Id">@p.Name (@p.Price €)</option>
+                }
+            </select>
+        </div>
+
+        <div class="col-2">
+            <input type="number" min="1" class="form-control" @bind="Quantity" />
+        </div>
+
+        <div class="col-2">
+            <button class="btn btn-primary" @onclick="Add">Ajouter</button>
+        </div>
+    </div>
+}
+
+
+@code {
+    [CascadingParameter] public OrderContext OrderContext { get; set; } = default!;
+
+    private Orders? Order;
+    private List<Product> Products = new();
+    private int SelectedProductId;
+    private int Quantity = 1;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        // Charger la commande et les produits via API
+        Order = await Api.GetOrderAsync(OrderContext.OrderId);
+        Products = await Api.GetProductsAsync();
+    }
+
+    private async Task Add()
+    {
+        if (SelectedProductId == 0) return;
+
+        await Api.AddProductAsync(OrderContext.OrderId, SelectedProductId, Quantity);
+        Order = await Api.GetOrderAsync(OrderContext.OrderId);
+
+        SelectedProductId = 0;
+        Quantity = 1;
+    }
+
+    private async Task Remove(int productId)
+    {
+        await Api.RemoveProductAsync(OrderContext.OrderId, productId);
+        Order = await Api.GetOrderAsync(OrderContext.OrderId);
+    }
+}

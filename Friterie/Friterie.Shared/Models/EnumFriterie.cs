@@ -12,8 +12,8 @@ namespace Friterie.Shared.Models
             All = 0,
             Burgers = 1,
             Viandes = 2,
-            Sauces = 10, //
-            Menus = 20, //
+            Sauces = 3, //
+            Menus = 4, //
         }
 
         public enum StatusTypeEnum : ushort
