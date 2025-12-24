@@ -13,11 +13,28 @@ public class CartService
 
     public event Action? OnChange;
 
+
+    public Cart Cart { get; } = new();
+
+    public void Add(Product product)
+    {
+        var item = Cart.Items.FirstOrDefault(i => i.Product.Id == product.Id);
+        if (item == null)
+            Cart.Items.Add(new CartItem { Product = product, Quantity = 1 });
+        else
+            item.Quantity++;
+    }
+
+    public void Remove(Product product)
+        => Cart.Items.RemoveAll(i => i.Product.Id == product.Id);
+
+
+
     public List<CartItem> GetItems() => _items;
 
     public void AddItem(Product product, int quantity = 1)
     {
-        var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+        var existingItem = _items.FirstOrDefault(i => i.Product.Id == product.Id);
 
         if (existingItem != null)
         {
@@ -28,12 +45,10 @@ public class CartService
 
             _items.Add(new CartItem
             {
-                ProductId = product.Id,
-                ProductName = product.Name,
-                Price = product.Price,
-                Quantity = quantity,
-                ImageUrl = product.ImageUrl
+                Product = product,
+                Quantity = quantity
             });
+
         }
 
         NotifyStateChanged();
@@ -41,7 +56,7 @@ public class CartService
 
     public void UpdateQuantity(int productId, int quantity)
     {
-        var item = _items.FirstOrDefault(i => i.ProductId == productId);
+        var item = _items.FirstOrDefault(i => i.Product.Id == productId);
         if (item != null)
         {
             if (quantity <= 0)
@@ -58,7 +73,7 @@ public class CartService
 
     public void RemoveItem(int productId)
     {
-        var item = _items.FirstOrDefault(i => i.ProductId == productId);
+        var item = _items.FirstOrDefault(i => i.Product.Id == productId);
         if (item != null)
         {
             _items.Remove(item);
@@ -72,7 +87,7 @@ public class CartService
         NotifyStateChanged();
     }
 
-    public decimal GetTotal() => _items.Sum(i => i.Price * i.Quantity);
+    public decimal GetTotal() => _items.Sum(i => i.Product.Price * i.Quantity);
 
     public int GetItemCount() => _items.Sum(i => i.Quantity);
 

@@ -1,5 +1,6 @@
 using Friterie.API.Services;
 using Friterie.API.Stores;
+using Friterie.BlazorServer.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
@@ -49,6 +50,7 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<IOrderStore, OrderStore>();
 builder.Services.AddScoped<OrderService>();
 
+builder.Services.AddScoped<CartService>();
 builder.Services.AddScoped<PaymentService>();
 
 

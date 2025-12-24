@@ -4,15 +4,16 @@ using Friterie.Shared.Models;
 
 public class CartService
 {
-    private List<CartItem> _items = new();
+    public Cart Cart { get; } = new();
+
 
     public event Action? OnChange;
 
-    public List<CartItem> GetItems() => _items;
+    public List<CartItem> GetItems() => Cart.Items;
 
     public void AddItem(Product product, int quantity = 1)
     {
-         var existingItem = _items.FirstOrDefault(i => i.ProductId == product.Id);
+        var existingItem = Cart.Items.FirstOrDefault(i => i.Product.Id == product.Id);
 
         if (existingItem != null)
         {
@@ -20,14 +21,24 @@ public class CartService
         }
         else
         {
-            _items.Add(new CartItem
+            Cart.Items.Add(new CartItem
             {
-                ProductId = product.Id,
-                ProductName = product.Name,
-                Price = product.Price,
+                Product = new Product
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    TypeProduct = product.TypeProduct,
+                    Price = product.Price,
+                    ImageUrl = product.ImageUrl,
+                    Stock = product.Stock,
+                    IsAvailable = product.IsAvailable
+
+
+                },
                 Quantity = quantity,
-                ImageUrl = product.ImageUrl
             });
+
         }
 
         NotifyStateChanged();
@@ -35,12 +46,12 @@ public class CartService
 
     public void UpdateQuantity(int productId, int quantity)
     {
-        var item = _items.FirstOrDefault(i => i.ProductId == productId);
+        var item = Cart.Items.FirstOrDefault(i => i.Product.Id == productId);
         if (item != null)
         {
             if (quantity <= 0)
             {
-                _items.Remove(item);
+                Cart.Items.Remove(item);
             }
             else
             {
@@ -52,23 +63,23 @@ public class CartService
 
     public void RemoveItem(int productId)
     {
-        var item = _items.FirstOrDefault(i => i.ProductId == productId);
+        var item = Cart.Items.FirstOrDefault(i => i.Product.Id == productId);
         if (item != null)
         {
-            _items.Remove(item);
+            Cart.Items.Remove(item);
             NotifyStateChanged();
         }
     }
 
     public void Clear()
     {
-        _items.Clear();
+        Cart.Items.Clear();
         NotifyStateChanged();
     }
 
-    public decimal GetTotal() => _items.Sum(i => i.Price * i.Quantity);
+    public decimal GetTotal() => Cart.Items.Sum(i => i.Product.Price * i.Quantity);
 
-    public int GetItemCount() => _items.Sum(i => i.Quantity);
+    public int GetItemCount() => Cart.Items.Sum(i => i.Quantity);
 
     private void NotifyStateChanged() => OnChange?.Invoke();
 }

@@ -72,8 +72,8 @@
                         @foreach (var item in cartItems)
                         {
                             <div class="d-flex justify-content-between mb-2 small">
-                                <span>@item.ProductName x @item.Quantity</span>
-                                <strong>@((item.Price * item.Quantity).ToString("C"))</strong>
+                                <span>@item.Product.Name x @item.Quantity</span>
+                                <strong>@((item.Product.Price * item.Quantity).ToString("C"))</strong>
                             </div>
                         }
                         <hr />
@@ -128,13 +128,17 @@
         try
         {
             // Créer la commande
+
             var items = cartItems.Select(i => new OrderItem
-            {
-                OiProductId = i.ProductId,
-                OiProductName = i.ProductName,
+                {
+                OiProductId = i.Product.Id,
+                OiProductName = i.Product.Name,
+                OiTypeProductId = i.Product.TypeProduct.TypeProductCode,
                 OiQuantity = i.Quantity,
-                OiPrice = i.Price,
+                OiPrice = i.Product.Price,
             }).ToList();
+        
+
 
             var order = await ApiService.CreateOrderAsync(items);
 

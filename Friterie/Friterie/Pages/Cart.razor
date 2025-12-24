@@ -1,0 +1,19 @@
+﻿@page "/cart"
+@using Friterie.BlazorServer.Services
+@inject CartService CartService
+@inject NavigationManager Navigation
+
+<h3>Panier</h3>
+
+@foreach (var item in CartService.Cart.Items)
+{
+    <p>@item.Product.Name - @item.Quantity x @item.Product.Price €</p>
+}
+
+<p>Total : @CartService.Cart.Total €</p>
+
+<button class="btn btn-success" @onclick='() => Navigation.NavigateTo("/order-confirmation/1")'>
+    Payer
+</button>
+
+

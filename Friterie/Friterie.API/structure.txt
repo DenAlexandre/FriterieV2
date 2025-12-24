@@ -1,0 +1,294 @@
+Structure du dossier
+Le numéro de série du volume est C0A5-625D
+C:.
+|   appsettings.json
+|   Friterie.API.csproj
+|   Friterie.API.csproj.user
+|   Program.cs
+|   structure.txt
+|   
++---bin
+|   +---Debug
+|   |   +---net10.0
+|   |   |       appsettings.json
+|   |   |       Friterie.API.deps.json
+|   |   |       Friterie.API.dll
+|   |   |       Friterie.API.exe
+|   |   |       Friterie.API.pdb
+|   |   |       Friterie.API.runtimeconfig.json
+|   |   |       Friterie.API.staticwebassets.endpoints.json
+|   |   |       Friterie.Shared.dll
+|   |   |       Friterie.Shared.pdb
+|   |   |       Microsoft.AspNetCore.Authentication.JwtBearer.dll
+|   |   |       Microsoft.IdentityModel.Abstractions.dll
+|   |   |       Microsoft.IdentityModel.JsonWebTokens.dll
+|   |   |       Microsoft.IdentityModel.Logging.dll
+|   |   |       Microsoft.IdentityModel.Protocols.dll
+|   |   |       Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+|   |   |       Microsoft.IdentityModel.Tokens.dll
+|   |   |       Microsoft.OpenApi.dll
+|   |   |       Newtonsoft.Json.dll
+|   |   |       Npgsql.dll
+|   |   |       Stripe.net.dll
+|   |   |       Swashbuckle.AspNetCore.Swagger.dll
+|   |   |       Swashbuckle.AspNetCore.SwaggerGen.dll
+|   |   |       Swashbuckle.AspNetCore.SwaggerUI.dll
+|   |   |       System.Configuration.ConfigurationManager.dll
+|   |   |       System.IdentityModel.Tokens.Jwt.dll
+|   |   |       System.Security.Cryptography.ProtectedData.dll
+|   |   |       
+|   |   \---net8.0
+|   \---Release
+|       \---net8.0
+|           |   appsettings.json
+|           |   Friterie.API.deps.json
+|           |   Friterie.API.dll
+|           |   Friterie.API.exe
+|           |   Friterie.API.pdb
+|           |   Friterie.API.runtimeconfig.json
+|           |   Friterie.API.staticwebassets.endpoints.json
+|           |   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+|           |   Microsoft.Extensions.Logging.Abstractions.dll
+|           |   Microsoft.OpenApi.dll
+|           |   Npgsql.dll
+|           |   Swashbuckle.AspNetCore.Swagger.dll
+|           |   Swashbuckle.AspNetCore.SwaggerGen.dll
+|           |   Swashbuckle.AspNetCore.SwaggerUI.dll
+|           |   
+|           \---publish
+|                   appsettings.json
+|                   Friterie.API.deps.json
+|                   Friterie.API.dll
+|                   Friterie.API.exe
+|                   Friterie.API.pdb
+|                   Friterie.API.runtimeconfig.json
+|                   Friterie.API.staticwebassets.endpoints.json
+|                   Microsoft.Extensions.DependencyInjection.Abstractions.dll
+|                   Microsoft.Extensions.Logging.Abstractions.dll
+|                   Microsoft.OpenApi.dll
+|                   Npgsql.dll
+|                   Swashbuckle.AspNetCore.Swagger.dll
+|                   Swashbuckle.AspNetCore.SwaggerGen.dll
+|                   Swashbuckle.AspNetCore.SwaggerUI.dll
+|                   web.config
+|                   
++---Controllers
+|       AuthControllers.cs
+|       OrdersController.cs
+|       PaymentController.cs
+|       ProductsController.cs
+|       
++---Models
++---obj
+|   |   ColorDemo.Server.csproj.nuget.dgspec.json
+|   |   ColorDemo.Server.csproj.nuget.g.props
+|   |   ColorDemo.Server.csproj.nuget.g.targets
+|   |   Friterie.API.csproj.nuget.dgspec.json
+|   |   Friterie.API.csproj.nuget.g.props
+|   |   Friterie.API.csproj.nuget.g.targets
+|   |   Friterie.Server.csproj.nuget.dgspec.json
+|   |   Friterie.Server.csproj.nuget.g.props
+|   |   Friterie.Server.csproj.nuget.g.targets
+|   |   Nutrition.Server.csproj.nuget.dgspec.json
+|   |   Nutrition.Server.csproj.nuget.g.props
+|   |   Nutrition.Server.csproj.nuget.g.targets
+|   |   project.assets.json
+|   |   project.nuget.cache
+|   |   
+|   +---Debug
+|   |   +---net10.0
+|   |   |   |   .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
+|   |   |   |   ApiEndpoints.json
+|   |   |   |   apphost.exe
+|   |   |   |   Friterie.487C2CE8.Up2Date
+|   |   |   |   Friterie.API.AssemblyInfo.cs
+|   |   |   |   Friterie.API.AssemblyInfoInputs.cache
+|   |   |   |   Friterie.API.assets.cache
+|   |   |   |   Friterie.API.csproj.AssemblyReference.cache
+|   |   |   |   Friterie.API.csproj.BuildWithSkipAnalyzers
+|   |   |   |   Friterie.API.csproj.CoreCompileInputs.cache
+|   |   |   |   Friterie.API.csproj.FileListAbsolute.txt
+|   |   |   |   Friterie.API.dll
+|   |   |   |   Friterie.API.GeneratedMSBuildEditorConfig.editorconfig
+|   |   |   |   Friterie.API.genruntimeconfig.cache
+|   |   |   |   Friterie.API.MvcApplicationPartsAssemblyInfo.cache
+|   |   |   |   Friterie.API.MvcApplicationPartsAssemblyInfo.cs
+|   |   |   |   Friterie.API.pdb
+|   |   |   |   Friterie.API.sourcelink.json
+|   |   |   |   rjsmcshtml.dswa.cache.json
+|   |   |   |   rjsmrazor.dswa.cache.json
+|   |   |   |   rpswa.dswa.cache.json
+|   |   |   |   staticwebassets.build.endpoints.json
+|   |   |   |   staticwebassets.build.json
+|   |   |   |   staticwebassets.build.json.cache
+|   |   |   |   staticwebassets.references.upToDateCheck.txt
+|   |   |   |   staticwebassets.removed.txt
+|   |   |   |   swae.build.ex.cache
+|   |   |   |   
+|   |   |   +---EndpointInfo
+|   |   |   |       Friterie.API.json
+|   |   |   |       Friterie.API.OpenApiFiles.cache
+|   |   |   |       
+|   |   |   +---ref
+|   |   |   |       Friterie.API.dll
+|   |   |   |       
+|   |   |   +---refint
+|   |   |   |       Friterie.API.dll
+|   |   |   |       
+|   |   |   \---staticwebassets
+|   |   \---net8.0
+|   |       |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|   |       |   ApiEndpoints.json
+|   |       |   apphost.exe
+|   |       |   ColorDem.7BC4B5D9.Up2Date
+|   |       |   ColorDemo.Server.AssemblyInfo.cs
+|   |       |   ColorDemo.Server.AssemblyInfoInputs.cache
+|   |       |   ColorDemo.Server.assets.cache
+|   |       |   ColorDemo.Server.csproj.AssemblyReference.cache
+|   |       |   ColorDemo.Server.csproj.BuildWithSkipAnalyzers
+|   |       |   ColorDemo.Server.csproj.CoreCompileInputs.cache
+|   |       |   ColorDemo.Server.csproj.FileListAbsolute.txt
+|   |       |   ColorDemo.Server.dll
+|   |       |   ColorDemo.Server.GeneratedMSBuildEditorConfig.editorconfig
+|   |       |   ColorDemo.Server.genruntimeconfig.cache
+|   |       |   ColorDemo.Server.MvcApplicationPartsAssemblyInfo.cache
+|   |       |   ColorDemo.Server.MvcApplicationPartsAssemblyInfo.cs
+|   |       |   ColorDemo.Server.pdb
+|   |       |   Friterie.02E2C1AC.Up2Date
+|   |       |   Friterie.API.assets.cache
+|   |       |   Friterie.API.csproj.BuildWithSkipAnalyzers
+|   |       |   Friterie.API.csproj.FileListAbsolute.txt
+|   |       |   Friterie.Server.AssemblyInfo.cs
+|   |       |   Friterie.Server.AssemblyInfoInputs.cache
+|   |       |   Friterie.Server.assets.cache
+|   |       |   Friterie.Server.csproj.AssemblyReference.cache
+|   |       |   Friterie.Server.csproj.BuildWithSkipAnalyzers
+|   |       |   Friterie.Server.csproj.CoreCompileInputs.cache
+|   |       |   Friterie.Server.csproj.FileListAbsolute.txt
+|   |       |   Friterie.Server.dll
+|   |       |   Friterie.Server.GeneratedMSBuildEditorConfig.editorconfig
+|   |       |   Friterie.Server.genruntimeconfig.cache
+|   |       |   Friterie.Server.MvcApplicationPartsAssemblyInfo.cache
+|   |       |   Friterie.Server.MvcApplicationPartsAssemblyInfo.cs
+|   |       |   Friterie.Server.pdb
+|   |       |   Friterie.Server.sourcelink.json
+|   |       |   Nutritio.62845BA6.Up2Date
+|   |       |   Nutrition.Server.AssemblyInfo.cs
+|   |       |   Nutrition.Server.AssemblyInfoInputs.cache
+|   |       |   Nutrition.Server.assets.cache
+|   |       |   Nutrition.Server.csproj.AssemblyReference.cache
+|   |       |   Nutrition.Server.csproj.BuildWithSkipAnalyzers
+|   |       |   Nutrition.Server.csproj.CoreCompileInputs.cache
+|   |       |   Nutrition.Server.csproj.FileListAbsolute.txt
+|   |       |   Nutrition.Server.dll
+|   |       |   Nutrition.Server.GeneratedMSBuildEditorConfig.editorconfig
+|   |       |   Nutrition.Server.genruntimeconfig.cache
+|   |       |   Nutrition.Server.MvcApplicationPartsAssemblyInfo.cache
+|   |       |   Nutrition.Server.MvcApplicationPartsAssemblyInfo.cs
+|   |       |   Nutrition.Server.pdb
+|   |       |   Nutrition.Server.sourcelink.json
+|   |       |   staticwebassets.references.upToDateCheck.txt
+|   |       |   staticwebassets.removed.txt
+|   |       |   
+|   |       +---EndpointInfo
+|   |       |       ColorDemo.Server.json
+|   |       |       ColorDemo.Server.OpenApiFiles.cache
+|   |       |       Friterie.API.json
+|   |       |       Friterie.API.OpenApiFiles.cache
+|   |       |       Friterie.Server.json
+|   |       |       Friterie.Server.OpenApiFiles.cache
+|   |       |       Nutrition.Server.json
+|   |       |       Nutrition.Server.OpenApiFiles.cache
+|   |       |       
+|   |       +---ref
+|   |       |       ColorDemo.Server.dll
+|   |       |       Friterie.Server.dll
+|   |       |       Nutrition.Server.dll
+|   |       |       
+|   |       +---refint
+|   |       |       ColorDemo.Server.dll
+|   |       |       Friterie.Server.dll
+|   |       |       Nutrition.Server.dll
+|   |       |       
+|   |       \---staticwebassets
+|   \---Release
+|       \---net8.0
+|           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|           |   apphost.exe
+|           |   Friterie.487C2CE8.Up2Date
+|           |   Friterie.API.AssemblyInfo.cs
+|           |   Friterie.API.AssemblyInfoInputs.cache
+|           |   Friterie.API.assets.cache
+|           |   Friterie.API.csproj.AssemblyReference.cache
+|           |   Friterie.API.csproj.CoreCompileInputs.cache
+|           |   Friterie.API.csproj.FileListAbsolute.txt
+|           |   Friterie.API.dll
+|           |   Friterie.API.GeneratedMSBuildEditorConfig.editorconfig
+|           |   Friterie.API.genruntimeconfig.cache
+|           |   Friterie.API.MvcApplicationPartsAssemblyInfo.cache
+|           |   Friterie.API.MvcApplicationPartsAssemblyInfo.cs
+|           |   Friterie.API.pdb
+|           |   Friterie.API.sourcelink.json
+|           |   PublishOutputs.8fff65851a.txt
+|           |   rjsmcshtml.dswa.cache.json
+|           |   rjsmrazor.dswa.cache.json
+|           |   rpswa.dswa.cache.json
+|           |   staticwebassets.build.endpoints.json
+|           |   staticwebassets.build.json
+|           |   staticwebassets.build.json.cache
+|           |   staticwebassets.publish.endpoints.json
+|           |   staticwebassets.publish.json
+|           |   staticwebassets.references.upToDateCheck.txt
+|           |   staticwebassets.removed.txt
+|           |   swae.build.ex.cache
+|           |   swae.publish.ex.cache
+|           |   
+|           +---PubTmp
+|           |   \---Out
+|           |           appsettings.json
+|           |           Friterie.API.deps.json
+|           |           Friterie.API.dll
+|           |           Friterie.API.exe
+|           |           Friterie.API.pdb
+|           |           Friterie.API.runtimeconfig.json
+|           |           Friterie.API.staticwebassets.endpoints.json
+|           |           Microsoft.Extensions.DependencyInjection.Abstractions.dll
+|           |           Microsoft.Extensions.Logging.Abstractions.dll
+|           |           Microsoft.OpenApi.dll
+|           |           Npgsql.dll
+|           |           Swashbuckle.AspNetCore.Swagger.dll
+|           |           Swashbuckle.AspNetCore.SwaggerGen.dll
+|           |           Swashbuckle.AspNetCore.SwaggerUI.dll
+|           |           web.config
+|           |           
+|           +---ref
+|           |       Friterie.API.dll
+|           |       
+|           +---refint
+|           |       Friterie.API.dll
+|           |       
+|           \---staticwebassets
++---Properties
+|   |   launchSettings.json
+|   |   
+|   \---PublishProfiles
+|           FolderProfile.pubxml
+|           FolderProfile.pubxml.user
+|           
++---Services
+|       AuthService.cs
+|       CartService.cs
+|       DataService.cs
+|       OrderService.cs
+|       PaymentService.cs
+|       ProductService.cs
+|       UserService.cs
+|       
+\---Stores
+        IOrderStore.cs
+        IProductStore.cs
+        IUserStore.cs
+        OrderStore.cs
+        ProductStore.cs
+        UserStore.cs
+        
