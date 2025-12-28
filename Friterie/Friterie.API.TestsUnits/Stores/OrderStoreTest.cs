@@ -4,6 +4,7 @@ using Friterie.Shared.Models;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using static Friterie.Shared.Models.EnumFriterie;
 
 namespace Friterie.API.TestsUnits.Stores
 {
@@ -50,12 +51,13 @@ namespace Friterie.API.TestsUnits.Stores
 
 
         [Fact]
-        public async Task GetByIdOrderAsync()
+        public async Task GetOrdersByUserId()
         {
             int user_id = 2;
-            var list = await OrderStore.GetByIdOrderAsync(user_id);
+            StatusTypeEnum statusTypeEnum = StatusTypeEnum.Créé;
+            var list = await OrderStore.GetOrdersByUserId(user_id,(int) statusTypeEnum);
 
-            Assert.Equal(user_id, list.OrderId);
+            Assert.Equal(1, list.Count);
         }
 
 

@@ -22,6 +22,21 @@
 
         private const string FN_GET_PRODUCTS_BDD = "select * from friterie.fn_get_products";
 
+        private const string REMOVE_ORDER = "CALL friterie.sp_delete_orders(@p_order_id)";
+        //private const string ADD_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/add-product";
+        //private const string ADD_ITEMS_IN_ORDER = "FriterieAPI/api/add-items-in-order";
+        private const string ADD_ORDER = "SELECT * FROM friterie.fn_insert_order(@p_order_user_id)";
+
+        private const string FN_GET_ORDER_BY_ID = "SELECT * FROM friterie.fn_get_orders_by_id(@p_order_id)";
+        private const string FN_GET_ORDER_BY_USER_ID = "SELECT * FROM friterie.fn_get_orders_by_user_id(@p_user_id , @p_status_id)";
+
+
+        private const string SP_UPDATE_ORDER_BY_ID = "CALL friterie.sp_update_orders(@p_order_id, @p_order_user_id, @p_order_datetime, @p_order_total, @p_order_status, @p_order_intent_id, @p_order_is_paid)";
+
+
+
+
+
         #region variables
 
         private readonly ILogger<IOrderStore> _logger = logger;
@@ -43,7 +58,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT * FROM friterie.fn_get_orders_by_id(@p_order_id)";
+            var sql = FN_GET_ORDER_BY_ID;
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue($"p_order_id", NpgsqlDbType.Integer, order_id);
@@ -62,6 +77,39 @@
                 OrderIsPaid = reader.IsDBNull(6) ? default : reader.GetBoolean(6)
             };
         }
+
+
+        public async Task<List<Order>> GetOrdersByUserId(int userId, int statusTypeEnum)
+        {
+            var result = new List<Order>();
+
+            await using var conn = new NpgsqlConnection(_connectionString);
+            await conn.OpenAsync();
+
+            var sql = FN_GET_ORDER_BY_USER_ID;
+
+            await using var cmd = new NpgsqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("p_user_id", NpgsqlDbType.Integer, userId);
+            cmd.Parameters.AddWithValue("p_status_id", NpgsqlDbType.Integer, statusTypeEnum);
+
+            await using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                result.Add(new Order
+                {
+                    OrderId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
+                    OrderUserId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
+                    OrderDatetime = reader.IsDBNull(2) ? default : reader.GetDateTime(2),
+                    OrderTotal = reader.IsDBNull(3) ? default : reader.GetDecimal(3),
+                    OrderStatus = reader.IsDBNull(4) ? default : reader.GetInt32(4),
+                    OrderIntentId = reader.IsDBNull(5) ? default : reader.GetString(5),
+                    OrderIsPaid = reader.IsDBNull(6) ? default : reader.GetBoolean(6)
+                });
+            }
+
+            return result;
+        }
+
 
         // =======================
         // GET ALL (pagination)
@@ -105,7 +153,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "SELECT * FROM friterie.fn_insert_order(@p_order_user_id)";
+            var sql = ADD_ORDER;
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_order_user_id", (object)userId ?? DBNull.Value);
@@ -123,7 +171,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.sp_update_orders(@p_order_id, @p_order_user_id, @p_order_datetime, @p_order_total, @p_order_status, @p_order_intent_id, @p_order_is_paid)";
+            var sql = SP_UPDATE_ORDER_BY_ID;
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue("p_order_id", (object?)entity.OrderId ?? DBNull.Value);
@@ -147,7 +195,7 @@
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.sp_delete_orders(@p_order_id);";
+            var sql = REMOVE_ORDER;
 
             await using var cmd = new NpgsqlCommand(sql, conn);
             cmd.Parameters.AddWithValue($"p_order_id", order_id);
@@ -251,6 +299,8 @@
 
             await cmd.ExecuteNonQueryAsync();
         }
+
+
 
 
         #endregion

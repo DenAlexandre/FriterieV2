@@ -44,7 +44,7 @@ public class OrderService
 
     public Task<Order?> GetOrderById(int orderId) => _orderStore.GetByIdOrderAsync(orderId);
 
-    public async Task<List<Order>> GetOrders(int userId) => await _orderStore.GetAllOrdersAsync(userId, 0 , 0);
+    public async Task<List<Order>> GetOrdersByUserId(int userId, int statusTypeEnum) => await _orderStore.GetOrdersByUserId(userId, statusTypeEnum);
 
     //public async Task<bool> UpdateOrderPaymentStatus(Orders order) =>
     //    await _orderStore.UpdateOrderAsync(order);

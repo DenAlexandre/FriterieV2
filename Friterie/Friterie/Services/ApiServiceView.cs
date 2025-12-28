@@ -152,7 +152,8 @@ public class ApiServiceView
     public async Task<int?> CreateOrderAsync(int userId)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync(ADD_ORDER, userId);
+
+        var response = await client.PostAsJsonAsync(ADD_ORDER, new { userId });
 
         if (response.IsSuccessStatusCode)
         {
@@ -167,10 +168,10 @@ public class ApiServiceView
     //    return await client.GetFromJsonAsync<Order>($GET_ORDER_BY_USER_ID +  "/{orderId}");
     //}
 
-    public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
+    public async Task<List<Order>> GetOrdersByUserIdAsync(int userId, int statusTypeEnum)
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Order>>(GET_ORDER_BY_USER_ID + $"/{userId}");
+        var orders = await client.GetFromJsonAsync<List<Order>>(GET_ORDER_BY_USER_ID + new { userId, statusTypeEnum });
         return orders ?? new List<Order>();
     }
     #endregion

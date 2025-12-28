@@ -4,12 +4,7 @@ using Friterie.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-
-
-
-
-
-
+using static Friterie.Shared.Models.EnumFriterie;
 
 [Authorize]
 [ApiController]
@@ -54,14 +49,14 @@ public class OrdersController : ControllerBase
     //}
 
     [HttpGet(GET_ORDER_BY_USER_ID)]
-    public IActionResult GetUserOrders()
+    public IActionResult GetOrdersByUserId(int userId, int statusTypeEnum)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim == null)
             return Unauthorized();
 
-        var userId = int.Parse(userIdClaim);
-        var orders = _orderService.GetOrders(userId);
+        var userId2 = int.Parse(userIdClaim);
+        var orders = _orderService.GetOrdersByUserId(userId2, statusTypeEnum);
 
         return Ok(orders);
     }

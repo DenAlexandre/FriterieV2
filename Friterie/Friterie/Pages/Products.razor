@@ -135,11 +135,19 @@
         try
         {
             OrderContext.UserId = user.UserId;
+
+            List<Order> orders = await ApiService.GetOrdersByUserIdAsync(OrderContext.UserId, (int)StatusTypeEnum.Créé);
+            Order order = orders.FirstOrDefault(o => o.OrderStatus == (int)StatusTypeEnum.Créé);
+
             // Si aucune commande active
-            if (OrderContext.OrderId == 0)
+            if (order == null)
             {
                 int? orderId = await ApiService.CreateOrderAsync(OrderContext.UserId);
                 OrderContext.OrderId = orderId?? 0;
+            }
+            else
+            {
+                OrderContext.OrderId = order.OrderId;
             }
         }
         catch (Exception ex)

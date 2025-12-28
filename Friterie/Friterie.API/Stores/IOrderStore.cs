@@ -43,6 +43,10 @@ namespace Friterie.API.Stores
 
         public Task DeleteOrderItemAsync(int oi_id);
 
+
+
+        //Task<List<Order>> GetOrdersByUserId(int userId, Stat v1, int v2);
+        Task<List<Order>> GetOrdersByUserId(int userId, int statusTypeEnum);
     }
 
 
