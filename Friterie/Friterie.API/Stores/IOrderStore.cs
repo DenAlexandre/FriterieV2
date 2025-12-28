@@ -14,7 +14,7 @@ namespace Friterie.API.Stores
         public  Task<List<Order>> GetAllOrdersAsync(int userid, int limit, int offset);
 
 
-        public  Task InsertOrderAsync(Order entity);
+        public  Task<int> InsertOrderAsync(int userId);
 
 
         public  Task<bool> UpdateOrderAsync(Order entity);

@@ -18,28 +18,28 @@ public class OrderService
         _orderStore = orderStore;
     }
 
-    public async Task CreateOrder(int userId, List<OrderItem> items)
+    public async Task<int> CreateOrder(int userId)
     {
-        var order = new Order
-        {
-            OrderUserId = userId,
-            //Items = items,
-            OrderTotal = items.Sum(i => i.OiPrice * i.OiQuantity),
-            OrderDatetime = DateTime.UtcNow,
-            OrderStatus = (int)StatusTypeEnum.Pending,
-        };
+        //var order = new Order
+        //{
+        //    OrderUserId = userId,
+        //    //Items = items,
+        //    //OrderTotal = items.Sum(i => i.OiPrice * i.OiQuantity),
+        //    OrderDatetime = DateTime.UtcNow,
+        //    OrderStatus = (int)StatusTypeEnum.Créé,
+        //};
 
-        // Réduire le stock
-        foreach (var item in items)
-        {
+        //// Réduire le stock
+        //foreach (var item in items)
+        //{
 
 
 
-            //TODO
-            //_orderService.UpdateOrderAsync(item.ProductId, item.Quantity);
-        }
+        //    //TODO
+        //    //_orderService.UpdateOrderAsync(item.ProductId, item.Quantity);
+        //}
 
-        await _orderStore.InsertOrderAsync(order);
+        return await _orderStore.InsertOrderAsync(userId);
     }
 
     public Task<Order?> GetOrderById(int orderId) => _orderStore.GetByIdOrderAsync(orderId);

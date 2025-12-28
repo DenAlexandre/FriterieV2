@@ -13,14 +13,16 @@ public class ApiServiceView
 
 
     private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
+    private const string REGISTER_BDD = "FriterieAPI/api/auth/register";
+
+
+
 
     private const string REMOVE_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/remove-product";
     private const string ADD_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/add-product";
     private const string ADD_ITEMS_IN_ORDER = "FriterieAPI/api/add-items-in-order";
-
-    
     private const string ADD_ORDER = "FriterieAPI/api/add-order";
-
+    private const string GET_ORDER_BY_USER_ID = "FriterieAPI/api/get-order-by-user-id";
 
     private const string GET_PRODUCTS_BDD = "/FriterieAPI/api/products/GetProducts";
     private const string GET_PRODUCTS_BY_CATEGORY_BDD = "/FriterieAPI/api/products/category";
@@ -64,7 +66,7 @@ public class ApiServiceView
     public async Task<bool> RegisterAsync(RegisterRequest request)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("FriterieAPI/api/auth/register", request);
+        var response = await client.PostAsJsonAsync(REGISTER_BDD, request);
         return response.IsSuccessStatusCode;
     }
     #endregion
@@ -150,7 +152,7 @@ public class ApiServiceView
     public async Task<int?> CreateOrderAsync(int userId)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("FriterieAPI/api/orders",userId);
+        var response = await client.PostAsJsonAsync(ADD_ORDER, userId);
 
         if (response.IsSuccessStatusCode)
         {
@@ -159,16 +161,16 @@ public class ApiServiceView
         return null;
     }
 
-    public async Task<Order?> GetOrderAsync(int orderId)
-    {
-        var client = CreateClient();
-        return await client.GetFromJsonAsync<Order>($"FriterieAPI/api/orders/{orderId}");
-    }
+    //public async Task<Order?> GetOrderAsync(int orderId)
+    //{
+    //    var client = CreateClient();
+    //    return await client.GetFromJsonAsync<Order>($GET_ORDER_BY_USER_ID +  "/{orderId}");
+    //}
 
-    public async Task<List<Order>> GetUserOrdersAsync()
+    public async Task<List<Order>> GetOrdersByUserIdAsync(int userId)
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Order>>("FriterieAPI/api/orders/user");
+        var orders = await client.GetFromJsonAsync<List<Order>>(GET_ORDER_BY_USER_ID + $"/{userId}");
         return orders ?? new List<Order>();
     }
     #endregion
@@ -207,14 +209,6 @@ public class LoginResponse
     public User User { get; set; } = new();
 }
 
-//public class UserInfoServer
-//{
-//    public int Id { get; set; }
-//    public string Email { get; set; } = string.Empty;
-//    public string FirstName { get; set; } = string.Empty;
-//    public string LastName { get; set; } = string.Empty;
-//    public string RoleName { get; set; } = string.Empty;
-//}
 
 public class RegisterRequest
 {

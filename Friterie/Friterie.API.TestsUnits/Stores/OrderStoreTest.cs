@@ -63,17 +63,19 @@ namespace Friterie.API.TestsUnits.Stores
         public async Task InsertOrderAsync()
         {
             //call friterie.sp_insert_orders(7,now()::timestamp without time zone, 25.50, 2,'',true);
-            Order entity = new Order
-            {
-                //OrderId = 5,
-                OrderUserId = 4,
-                OrderDatetime = DateTime.UtcNow,
-                OrderTotal = 25.50m,
-                OrderStatus = 2,
-                OrderIntentId = "",
-                OrderIsPaid = true,
-            };
-            await OrderStore.InsertOrderAsync(entity);
+            //Order entity = new Order
+            //{
+            //    //OrderId = 5,
+            //    OrderUserId = 4,
+            //    OrderDatetime = DateTime.UtcNow,
+            //    OrderTotal = 25.50m,
+            //    OrderStatus = 2,
+            //    OrderIntentId = "",
+            //    OrderIsPaid = true,
+            //};
+
+            int userID = 8;
+            int orderId = await OrderStore.InsertOrderAsync(userID);
 
 
 

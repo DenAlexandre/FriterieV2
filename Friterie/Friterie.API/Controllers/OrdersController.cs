@@ -5,11 +5,24 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
+
+
+
+
+
+
 [Authorize]
 [ApiController]
-[Route("FriterieAPI/api/[controller]")]
 public class OrdersController : ControllerBase
 {
+
+    private const string REMOVE_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/remove-product";
+    private const string ADD_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/add-product";
+    private const string ADD_ITEMS_IN_ORDER = "FriterieAPI/api/add-items-in-order";
+    private const string ADD_ORDER = "FriterieAPI/api/add-order";
+    private const string GET_ORDER_BY_USER_ID = "FriterieAPI/api/get-order-by-user-id";
+
+
     private readonly OrderService _orderService;
 
     public OrdersController(OrderService orderService)
@@ -17,30 +30,30 @@ public class OrdersController : ControllerBase
         _orderService = orderService;
     }
 
-    [HttpPost]
-    public IActionResult CreateOrder([FromBody] CreateOrderDto dto)
+    [HttpPost(ADD_ORDER)]
+    public IActionResult CreateOrder([FromBody] int UserID)
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         if (userIdClaim == null)
             return Unauthorized();
 
         var userId = int.Parse(userIdClaim);
-        var order = _orderService.CreateOrder(userId, dto.Items);
+        var orderId = _orderService.CreateOrder(userId);
 
-        return Ok(order);
+        return Ok(orderId);
     }
 
-    [HttpGet("{id}")]
-    public IActionResult GetOrder(int id)
-    {
-        var order = _orderService.GetOrderById(id);
-        if (order == null)
-            return NotFound();
+    //[HttpGet("{id}")]
+    //public IActionResult GetOrder(int id)
+    //{
+    //    var order = _orderService.GetOrderById(id);
+    //    if (order == null)
+    //        return NotFound();
 
-        return Ok(order);
-    }
+    //    return Ok(order);
+    //}
 
-    [HttpGet("user")]
+    [HttpGet(GET_ORDER_BY_USER_ID)]
     public IActionResult GetUserOrders()
     {
         var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

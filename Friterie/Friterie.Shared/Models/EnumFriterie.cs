@@ -18,11 +18,12 @@ namespace Friterie.Shared.Models
 
         public enum StatusTypeEnum : ushort
         {
-
-            Pending = 0,
-            Paid = 1, //
-            Completed = 2, //
-            Cancelled = 3,
+            Créé = 0,
+            EnCoursDeCommande = 10,
+            EnCoursDeFabrication = 20,
+            Terminé = 30, //
+            Annulé = 40,
+            Inconnu = 100
 
         }
     }

@@ -124,8 +124,28 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Initialize(AuthStateService.CurrentUser);
         await LoadProducts();
+
         CartService.OnChange += StateHasChanged;
+    }
+
+    private async Task Initialize(User user)
+    {
+        try
+        {
+            OrderContext.UserId = user.UserId;
+            // Si aucune commande active
+            if (OrderContext.OrderId == 0)
+            {
+                int? orderId = await ApiService.CreateOrderAsync(OrderContext.UserId);
+                OrderContext.OrderId = orderId?? 0;
+            }
+        }
+        catch (Exception ex)
+        {
+
+        }
     }
 
     private async Task LoadProducts()

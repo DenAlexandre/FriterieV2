@@ -100,22 +100,19 @@
         // =======================
         // INSERT
         // =======================
-        public async Task InsertOrderAsync(Order entity)
+        public async Task<int> InsertOrderAsync(int userId)
         {
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
 
-            var sql = "CALL friterie.sp_insert_orders(@p_order_user_id, @p_order_datetime, @p_order_total, @p_order_status, @p_order_intent_id, @p_order_is_paid)";
+            var sql = "SELECT * FROM friterie.fn_insert_order(@p_order_user_id)";
 
             await using var cmd = new NpgsqlCommand(sql, conn);
-            cmd.Parameters.AddWithValue("p_order_user_id", (object?)entity.OrderUserId ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("p_order_datetime", NpgsqlDbType.Timestamp, DateTime.SpecifyKind(entity.OrderDatetime, DateTimeKind.Unspecified));
-            cmd.Parameters.AddWithValue("p_order_total", (object?)entity.OrderTotal ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("p_order_status", (object?)entity.OrderStatus ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("p_order_intent_id", (object?)entity.OrderIntentId ?? DBNull.Value);
-            cmd.Parameters.AddWithValue("p_order_is_paid", (object?)entity.OrderIsPaid ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("p_order_user_id", (object)userId ?? DBNull.Value);
 
-            await cmd.ExecuteNonQueryAsync();
+            var result = await cmd.ExecuteScalarAsync();
+            return Convert.ToInt32(result);
+            //return await cmd.ExecuteNonQueryAsync();
         }
 
         // =======================
