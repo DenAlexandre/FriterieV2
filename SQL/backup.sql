@@ -5,7 +5,7 @@
 -- Dumped from database version 16.3 (Debian 16.3-1.pgdg120+1)
 -- Dumped by pg_dump version 17.0
 
--- Started on 2025-12-23 10:06:40
+-- Started on 2025-12-28 15:32:59
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -30,7 +30,7 @@ CREATE SCHEMA friterie;
 ALTER SCHEMA friterie OWNER TO dbosdr;
 
 --
--- TOC entry 336 (class 1255 OID 65539)
+-- TOC entry 337 (class 1255 OID 65539)
 -- Name: fn_get_aliments(integer, integer, integer); Type: FUNCTION; Schema: friterie; Owner: dbosdr
 --
 
@@ -51,7 +51,7 @@ $$;
 ALTER FUNCTION friterie.fn_get_aliments(in_type integer, in_limit integer, in_offset integer) OWNER TO dbosdr;
 
 --
--- TOC entry 337 (class 1255 OID 65540)
+-- TOC entry 338 (class 1255 OID 65540)
 -- Name: fn_get_count_aliments(); Type: FUNCTION; Schema: friterie; Owner: dbosdr
 --
 
@@ -69,7 +69,7 @@ $$;
 ALTER FUNCTION friterie.fn_get_count_aliments() OWNER TO dbosdr;
 
 --
--- TOC entry 338 (class 1255 OID 65541)
+-- TOC entry 339 (class 1255 OID 65541)
 -- Name: fn_get_groupes_aliments(); Type: FUNCTION; Schema: friterie; Owner: dbosdr
 --
 
@@ -196,7 +196,26 @@ $$;
 ALTER FUNCTION friterie.fn_get_orders_by_id(p_order_id integer) OWNER TO dbosdr;
 
 --
--- TOC entry 339 (class 1255 OID 73731)
+-- TOC entry 355 (class 1255 OID 90124)
+-- Name: fn_get_orders_by_user_id(integer, integer); Type: FUNCTION; Schema: friterie; Owner: dbosdr
+--
+
+CREATE FUNCTION friterie.fn_get_orders_by_user_id(p_user_id integer, p_status_id integer) RETURNS SETOF friterie.orders
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    RETURN QUERY
+	SELECT order_id, order_user_id, order_datetime, order_total, order_status, order_intent_id, order_is_paid
+	FROM friterie.orders
+    WHERE order_user_id = p_user_id and order_status = p_status_id;
+END;
+$$;
+
+
+ALTER FUNCTION friterie.fn_get_orders_by_user_id(p_user_id integer, p_status_id integer) OWNER TO dbosdr;
+
+--
+-- TOC entry 340 (class 1255 OID 73731)
 -- Name: fn_get_products(integer, integer, integer); Type: FUNCTION; Schema: friterie; Owner: dbosdr
 --
 
@@ -278,6 +297,30 @@ $$;
 ALTER FUNCTION friterie.fn_get_users_by_id(in_user_id integer) OWNER TO dbosdr;
 
 --
+-- TOC entry 354 (class 1255 OID 90123)
+-- Name: fn_insert_order(integer); Type: FUNCTION; Schema: friterie; Owner: dbosdr
+--
+
+CREATE FUNCTION friterie.fn_insert_order(p_order_user_id integer) RETURNS integer
+    LANGUAGE plpgsql
+    AS $$
+DECLARE
+    v_order_id INT;
+BEGIN
+    INSERT INTO friterie.orders
+    (order_user_id, order_datetime, order_total, order_status, order_intent_id, order_is_paid)
+    VALUES
+    (p_order_user_id, now(), 0, 0, '', false)
+    RETURNING order_id INTO v_order_id;
+
+    RETURN v_order_id;
+END;
+$$;
+
+
+ALTER FUNCTION friterie.fn_insert_order(p_order_user_id integer) OWNER TO dbosdr;
+
+--
 -- TOC entry 346 (class 1255 OID 73802)
 -- Name: sp_delete_order_item(integer); Type: PROCEDURE; Schema: friterie; Owner: dbosdr
 --
@@ -295,7 +338,7 @@ $$;
 ALTER PROCEDURE friterie.sp_delete_order_item(IN p_oi_id integer) OWNER TO dbosdr;
 
 --
--- TOC entry 340 (class 1255 OID 73795)
+-- TOC entry 341 (class 1255 OID 73795)
 -- Name: sp_delete_orders(integer); Type: PROCEDURE; Schema: friterie; Owner: dbosdr
 --
 
@@ -312,7 +355,7 @@ $$;
 ALTER PROCEDURE friterie.sp_delete_orders(IN p_order_id integer) OWNER TO dbosdr;
 
 --
--- TOC entry 309 (class 1255 OID 73788)
+-- TOC entry 310 (class 1255 OID 73788)
 -- Name: sp_delete_users(integer); Type: PROCEDURE; Schema: friterie; Owner: dbosdr
 --
 
@@ -346,25 +389,6 @@ $$;
 
 
 ALTER PROCEDURE friterie.sp_insert_order_item(IN p_oi_product_id integer, IN p_oi_product_name character varying, IN p_oi_quantity integer, IN p_oi_price numeric, IN p_oi_order_id integer, IN p_oi_type_product_id integer) OWNER TO dbosdr;
-
---
--- TOC entry 341 (class 1255 OID 73796)
--- Name: sp_insert_orders(integer, timestamp without time zone, numeric, integer, character varying, boolean); Type: PROCEDURE; Schema: friterie; Owner: dbosdr
---
-
-CREATE PROCEDURE friterie.sp_insert_orders(IN p_order_user_id integer, IN p_order_datetime timestamp without time zone, IN p_order_total numeric, IN p_order_status integer, IN p_order_intent_id character varying, IN p_order_is_paid boolean)
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    INSERT INTO friterie.orders
-    (order_user_id, order_datetime, order_total, order_status, order_intent_id, order_is_paid)
-    VALUES
-    (p_order_user_id, p_order_datetime, p_order_total, p_order_status, p_order_intent_id, p_order_is_paid);
-END;
-$$;
-
-
-ALTER PROCEDURE friterie.sp_insert_orders(IN p_order_user_id integer, IN p_order_datetime timestamp without time zone, IN p_order_total numeric, IN p_order_status integer, IN p_order_intent_id character varying, IN p_order_is_paid boolean) OWNER TO dbosdr;
 
 --
 -- TOC entry 348 (class 1255 OID 81931)
@@ -483,7 +507,7 @@ CREATE TABLE friterie.aliments (
 ALTER TABLE friterie.aliments OWNER TO dbosdr;
 
 --
--- TOC entry 3586 (class 0 OID 0)
+-- TOC entry 3594 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_groupe_code; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -492,7 +516,7 @@ COMMENT ON COLUMN friterie.aliments.t_groupe_code IS 'alim_grp_code';
 
 
 --
--- TOC entry 3587 (class 0 OID 0)
+-- TOC entry 3595 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_ss_groupe_code; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -501,7 +525,7 @@ COMMENT ON COLUMN friterie.aliments.t_ss_groupe_code IS 'alim_ssgrp_code';
 
 
 --
--- TOC entry 3588 (class 0 OID 0)
+-- TOC entry 3596 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_ss_ss_groupe_code; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -510,7 +534,7 @@ COMMENT ON COLUMN friterie.aliments.t_ss_ss_groupe_code IS 'alim_ssssgrp_code';
 
 
 --
--- TOC entry 3589 (class 0 OID 0)
+-- TOC entry 3597 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_groupe_nom; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -519,7 +543,7 @@ COMMENT ON COLUMN friterie.aliments.t_groupe_nom IS 'alim_grp_nom_fr';
 
 
 --
--- TOC entry 3590 (class 0 OID 0)
+-- TOC entry 3598 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_ss_groupe_nom; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -528,7 +552,7 @@ COMMENT ON COLUMN friterie.aliments.t_ss_groupe_nom IS 'alim_ssgrp_nom_fr';
 
 
 --
--- TOC entry 3591 (class 0 OID 0)
+-- TOC entry 3599 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_ss_ss_groupe_nom; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -537,7 +561,7 @@ COMMENT ON COLUMN friterie.aliments.t_ss_ss_groupe_nom IS 'alim_ssssgrp_nom_fr';
 
 
 --
--- TOC entry 3592 (class 0 OID 0)
+-- TOC entry 3600 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_aliment_code; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -546,7 +570,7 @@ COMMENT ON COLUMN friterie.aliments.t_aliment_code IS 'alim_code';
 
 
 --
--- TOC entry 3593 (class 0 OID 0)
+-- TOC entry 3601 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_aliment_nom; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -555,7 +579,7 @@ COMMENT ON COLUMN friterie.aliments.t_aliment_nom IS 'alim_nom_fr';
 
 
 --
--- TOC entry 3594 (class 0 OID 0)
+-- TOC entry 3602 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_proteines; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -564,7 +588,7 @@ COMMENT ON COLUMN friterie.aliments.t_proteines IS 'Protéines, N x 6.25 (g/100 
 
 
 --
--- TOC entry 3595 (class 0 OID 0)
+-- TOC entry 3603 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_glucides; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -573,7 +597,7 @@ COMMENT ON COLUMN friterie.aliments.t_glucides IS 'Glucides (g/100 g)';
 
 
 --
--- TOC entry 3596 (class 0 OID 0)
+-- TOC entry 3604 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_lipides; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -582,7 +606,7 @@ COMMENT ON COLUMN friterie.aliments.t_lipides IS 'Lipides (g/100 g)';
 
 
 --
--- TOC entry 3597 (class 0 OID 0)
+-- TOC entry 3605 (class 0 OID 0)
 -- Dependencies: 280
 -- Name: COLUMN aliments.t_energie; Type: COMMENT; Schema: friterie; Owner: dbosdr
 --
@@ -625,7 +649,7 @@ CREATE SEQUENCE friterie.burgers_1_id_burger_seq
 ALTER SEQUENCE friterie.burgers_1_id_burger_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3598 (class 0 OID 0)
+-- TOC entry 3606 (class 0 OID 0)
 -- Dependencies: 283
 -- Name: burgers_1_id_burger_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
@@ -663,7 +687,7 @@ CREATE SEQUENCE friterie.categories_id_categorie_seq
 ALTER SEQUENCE friterie.categories_id_categorie_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3599 (class 0 OID 0)
+-- TOC entry 3607 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: categories_id_categorie_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
@@ -688,13 +712,26 @@ CREATE SEQUENCE friterie.order_item_oi_id_seq
 ALTER SEQUENCE friterie.order_item_oi_id_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3600 (class 0 OID 0)
+-- TOC entry 3608 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: order_item_oi_id_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
 
 ALTER SEQUENCE friterie.order_item_oi_id_seq OWNED BY friterie.order_item.oi_id;
 
+
+--
+-- TOC entry 294 (class 1259 OID 90113)
+-- Name: order_status; Type: TABLE; Schema: friterie; Owner: dbosdr
+--
+
+CREATE TABLE friterie.order_status (
+    id_status integer NOT NULL,
+    nom_status character varying
+);
+
+
+ALTER TABLE friterie.order_status OWNER TO dbosdr;
 
 --
 -- TOC entry 286 (class 1259 OID 73735)
@@ -713,7 +750,7 @@ CREATE SEQUENCE friterie.orders_order_id_seq
 ALTER SEQUENCE friterie.orders_order_id_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3601 (class 0 OID 0)
+-- TOC entry 3609 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: orders_order_id_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
@@ -751,7 +788,7 @@ CREATE SEQUENCE friterie.roles_id_role_seq
 ALTER SEQUENCE friterie.roles_id_role_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3602 (class 0 OID 0)
+-- TOC entry 3610 (class 0 OID 0)
 -- Dependencies: 291
 -- Name: roles_id_role_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
@@ -809,7 +846,7 @@ CREATE SEQUENCE friterie.users_user_id_seq
 ALTER SEQUENCE friterie.users_user_id_seq OWNER TO dbosdr;
 
 --
--- TOC entry 3603 (class 0 OID 0)
+-- TOC entry 3611 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: friterie; Owner: dbosdr
 --
@@ -818,7 +855,7 @@ ALTER SEQUENCE friterie.users_user_id_seq OWNED BY friterie.users.user_id;
 
 
 --
--- TOC entry 3402 (class 2604 OID 65574)
+-- TOC entry 3407 (class 2604 OID 65574)
 -- Name: categories id_categorie; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -826,7 +863,7 @@ ALTER TABLE ONLY friterie.categories ALTER COLUMN id_categorie SET DEFAULT nextv
 
 
 --
--- TOC entry 3406 (class 2604 OID 73748)
+-- TOC entry 3411 (class 2604 OID 73748)
 -- Name: order_item oi_id; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -834,7 +871,7 @@ ALTER TABLE ONLY friterie.order_item ALTER COLUMN oi_id SET DEFAULT nextval('fri
 
 
 --
--- TOC entry 3405 (class 2604 OID 73736)
+-- TOC entry 3410 (class 2604 OID 73736)
 -- Name: orders order_id; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -842,7 +879,7 @@ ALTER TABLE ONLY friterie.orders ALTER COLUMN order_id SET DEFAULT nextval('frit
 
 
 --
--- TOC entry 3403 (class 2604 OID 65581)
+-- TOC entry 3408 (class 2604 OID 65581)
 -- Name: products art_id; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -850,7 +887,7 @@ ALTER TABLE ONLY friterie.products ALTER COLUMN art_id SET DEFAULT nextval('frit
 
 
 --
--- TOC entry 3409 (class 2604 OID 81926)
+-- TOC entry 3414 (class 2604 OID 81926)
 -- Name: roles id_role; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -858,7 +895,7 @@ ALTER TABLE ONLY friterie.roles ALTER COLUMN id_role SET DEFAULT nextval('friter
 
 
 --
--- TOC entry 3407 (class 2604 OID 73762)
+-- TOC entry 3412 (class 2604 OID 73762)
 -- Name: users user_id; Type: DEFAULT; Schema: friterie; Owner: dbosdr
 --
 
@@ -866,7 +903,7 @@ ALTER TABLE ONLY friterie.users ALTER COLUMN user_id SET DEFAULT nextval('friter
 
 
 --
--- TOC entry 3567 (class 0 OID 65542)
+-- TOC entry 3574 (class 0 OID 65542)
 -- Dependencies: 280
 -- Data for Name: aliments; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4059,7 +4096,7 @@ INSERT INTO friterie.aliments VALUES (11, 1104, 0, 'aliments infantiles', 'cér�
 
 
 --
--- TOC entry 3569 (class 0 OID 65571)
+-- TOC entry 3576 (class 0 OID 65571)
 -- Dependencies: 282
 -- Data for Name: categories; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4069,7 +4106,7 @@ INSERT INTO friterie.categories VALUES (2, 'viandes');
 
 
 --
--- TOC entry 3574 (class 0 OID 73744)
+-- TOC entry 3581 (class 0 OID 73744)
 -- Dependencies: 287
 -- Data for Name: order_item; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4078,16 +4115,40 @@ INSERT INTO friterie.order_item VALUES (2, 3, 'Test Product', 2, 12.75, 5, NULL)
 
 
 --
--- TOC entry 3572 (class 0 OID 73732)
+-- TOC entry 3588 (class 0 OID 90113)
+-- Dependencies: 294
+-- Data for Name: order_status; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
+--
+
+INSERT INTO friterie.order_status VALUES (0, 'Créé');
+INSERT INTO friterie.order_status VALUES (10, 'EnCoursDeCommande');
+INSERT INTO friterie.order_status VALUES (20, 'EnCoursDeFabrication');
+INSERT INTO friterie.order_status VALUES (30, 'Terminé');
+INSERT INTO friterie.order_status VALUES (40, 'Annulé');
+INSERT INTO friterie.order_status VALUES (100, 'Inconnu');
+
+
+--
+-- TOC entry 3579 (class 0 OID 73732)
 -- Dependencies: 285
 -- Data for Name: orders; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
 
 INSERT INTO friterie.orders VALUES (2, 4, '2025-12-21 16:26:29.334265', 25.50, 2, '', true);
+INSERT INTO friterie.orders VALUES (3, 8, '2025-12-28 11:48:15.157047', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (4, 8, '2025-12-28 12:54:03.568715', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (5, 8, '2025-12-28 12:54:24.582572', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (6, 8, '2025-12-28 11:56:08.330838', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (7, 8, '2025-12-28 12:01:05.905268', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (8, 8, '2025-12-28 12:01:30.733546', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (9, 8, '2025-12-28 12:02:27.968904', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (10, 8, '2025-12-28 12:02:52.338512', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (11, 8, '2025-12-28 14:18:53.632385', 0, 0, '', false);
+INSERT INTO friterie.orders VALUES (12, 8, '2025-12-28 14:19:20.987488', 0, 0, '', false);
 
 
 --
--- TOC entry 3571 (class 0 OID 65578)
+-- TOC entry 3578 (class 0 OID 65578)
 -- Dependencies: 284
 -- Data for Name: products; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4099,7 +4160,7 @@ INSERT INTO friterie.products VALUES (2, 'Montagnard', 'Montagnard', 9.45, 'img/
 
 
 --
--- TOC entry 3579 (class 0 OID 81923)
+-- TOC entry 3586 (class 0 OID 81923)
 -- Dependencies: 292
 -- Data for Name: roles; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4109,7 +4170,7 @@ INSERT INTO friterie.roles VALUES (1, 'Administrator');
 
 
 --
--- TOC entry 3580 (class 0 OID 81939)
+-- TOC entry 3587 (class 0 OID 81939)
 -- Dependencies: 293
 -- Data for Name: type_products; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4122,7 +4183,7 @@ INSERT INTO friterie.type_products VALUES (4, 'Menus');
 
 
 --
--- TOC entry 3576 (class 0 OID 73758)
+-- TOC entry 3583 (class 0 OID 73758)
 -- Dependencies: 289
 -- Data for Name: users; Type: TABLE DATA; Schema: friterie; Owner: dbosdr
 --
@@ -4131,7 +4192,7 @@ INSERT INTO friterie.users VALUES (8, 'den.alexandre@gmail.com', 'K90NQJs9Fk9HvU
 
 
 --
--- TOC entry 3604 (class 0 OID 0)
+-- TOC entry 3612 (class 0 OID 0)
 -- Dependencies: 283
 -- Name: burgers_1_id_burger_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
@@ -4140,7 +4201,7 @@ SELECT pg_catalog.setval('friterie.burgers_1_id_burger_seq', 1, false);
 
 
 --
--- TOC entry 3605 (class 0 OID 0)
+-- TOC entry 3613 (class 0 OID 0)
 -- Dependencies: 281
 -- Name: categories_id_categorie_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
@@ -4149,7 +4210,7 @@ SELECT pg_catalog.setval('friterie.categories_id_categorie_seq', 2, true);
 
 
 --
--- TOC entry 3606 (class 0 OID 0)
+-- TOC entry 3614 (class 0 OID 0)
 -- Dependencies: 288
 -- Name: order_item_oi_id_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
@@ -4158,16 +4219,16 @@ SELECT pg_catalog.setval('friterie.order_item_oi_id_seq', 2, true);
 
 
 --
--- TOC entry 3607 (class 0 OID 0)
+-- TOC entry 3615 (class 0 OID 0)
 -- Dependencies: 286
 -- Name: orders_order_id_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
 
-SELECT pg_catalog.setval('friterie.orders_order_id_seq', 2, true);
+SELECT pg_catalog.setval('friterie.orders_order_id_seq', 12, true);
 
 
 --
--- TOC entry 3608 (class 0 OID 0)
+-- TOC entry 3616 (class 0 OID 0)
 -- Dependencies: 291
 -- Name: roles_id_role_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
@@ -4176,7 +4237,7 @@ SELECT pg_catalog.setval('friterie.roles_id_role_seq', 1, true);
 
 
 --
--- TOC entry 3609 (class 0 OID 0)
+-- TOC entry 3617 (class 0 OID 0)
 -- Dependencies: 290
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: friterie; Owner: dbosdr
 --
@@ -4185,7 +4246,7 @@ SELECT pg_catalog.setval('friterie.users_user_id_seq', 8, true);
 
 
 --
--- TOC entry 3411 (class 2606 OID 65548)
+-- TOC entry 3416 (class 2606 OID 65548)
 -- Name: aliments aliments_unique; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4194,7 +4255,7 @@ ALTER TABLE ONLY friterie.aliments
 
 
 --
--- TOC entry 3415 (class 2606 OID 65590)
+-- TOC entry 3420 (class 2606 OID 65590)
 -- Name: products articles_unique; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4203,7 +4264,7 @@ ALTER TABLE ONLY friterie.products
 
 
 --
--- TOC entry 3413 (class 2606 OID 65586)
+-- TOC entry 3418 (class 2606 OID 65586)
 -- Name: categories categories_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4212,7 +4273,7 @@ ALTER TABLE ONLY friterie.categories
 
 
 --
--- TOC entry 3419 (class 2606 OID 73755)
+-- TOC entry 3424 (class 2606 OID 73755)
 -- Name: order_item order_item_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4221,7 +4282,16 @@ ALTER TABLE ONLY friterie.order_item
 
 
 --
--- TOC entry 3417 (class 2606 OID 73741)
+-- TOC entry 3430 (class 2606 OID 90119)
+-- Name: order_status order_status_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
+--
+
+ALTER TABLE ONLY friterie.order_status
+    ADD CONSTRAINT order_status_pk PRIMARY KEY (id_status);
+
+
+--
+-- TOC entry 3422 (class 2606 OID 73741)
 -- Name: orders orders_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4230,7 +4300,7 @@ ALTER TABLE ONLY friterie.orders
 
 
 --
--- TOC entry 3423 (class 2606 OID 81945)
+-- TOC entry 3428 (class 2606 OID 81945)
 -- Name: type_products type_products_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4239,7 +4309,7 @@ ALTER TABLE ONLY friterie.type_products
 
 
 --
--- TOC entry 3421 (class 2606 OID 73767)
+-- TOC entry 3426 (class 2606 OID 73767)
 -- Name: users users_pk; Type: CONSTRAINT; Schema: friterie; Owner: dbosdr
 --
 
@@ -4247,7 +4317,7 @@ ALTER TABLE ONLY friterie.users
     ADD CONSTRAINT users_pk PRIMARY KEY (user_id);
 
 
--- Completed on 2025-12-23 10:06:40
+-- Completed on 2025-12-28 15:33:01
 
 --
 -- PostgreSQL database dump complete
