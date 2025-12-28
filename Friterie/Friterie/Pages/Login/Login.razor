@@ -1,8 +1,9 @@
 ﻿@page "/login"
 @using Friterie.BlazorServer.Services
 @using System.Security.Claims
-@inject ApiService ApiService
+@inject ApiServiceView ApiService
 @inject AuthenticationStateProvider AuthProvider
+@inject AuthStateServiceView AuthStateService
 @inject NavigationManager Navigation
 
 <PageTitle>Connexion - Friterie</PageTitle>
@@ -82,7 +83,9 @@
 
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, response.User.FirstName), // 👈 Denis
+                    new Claim("UserId", response.User.UserId.ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, response.User.UserId.ToString()),
+                    new Claim(ClaimTypes.Name, response.User.FirstName),
                     new Claim(ClaimTypes.Email, response.User.Email),
                 };
 
@@ -94,6 +97,7 @@
                 // }
 
                 provider.SignIn(response.User.FirstName, claims);
+                AuthStateService.Login(response.Token, response.User);
 
                 Navigation.NavigateTo("/products");
             }

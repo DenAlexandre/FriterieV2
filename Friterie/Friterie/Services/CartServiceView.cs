@@ -2,7 +2,7 @@
 
 using Friterie.Shared.Models;
 
-public class CartService
+public class CartServiceView
 {
     public Cart Cart { get; } = new();
 

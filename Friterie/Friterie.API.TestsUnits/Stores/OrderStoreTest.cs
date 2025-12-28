@@ -63,7 +63,7 @@ namespace Friterie.API.TestsUnits.Stores
         public async Task InsertOrderAsync()
         {
             //call friterie.sp_insert_orders(7,now()::timestamp without time zone, 25.50, 2,'',true);
-            Orders entity = new Orders
+            Order entity = new Order
             {
                 //OrderId = 5,
                 OrderUserId = 4,
@@ -85,7 +85,7 @@ namespace Friterie.API.TestsUnits.Stores
 
 
 
-            Orders entity = new Orders
+            Order entity = new Order
             {
                OrderId = 2,
                 OrderUserId = 4,

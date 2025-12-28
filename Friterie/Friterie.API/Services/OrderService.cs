@@ -20,7 +20,7 @@ public class OrderService
 
     public async Task CreateOrder(int userId, List<OrderItem> items)
     {
-        var order = new Orders
+        var order = new Order
         {
             OrderUserId = userId,
             //Items = items,
@@ -42,9 +42,9 @@ public class OrderService
         await _orderStore.InsertOrderAsync(order);
     }
 
-    public Task<Orders?> GetOrderById(int orderId) => _orderStore.GetByIdOrderAsync(orderId);
+    public Task<Order?> GetOrderById(int orderId) => _orderStore.GetByIdOrderAsync(orderId);
 
-    public async Task<List<Orders>> GetOrders(int userId) => await _orderStore.GetAllOrdersAsync(userId, 0 , 0);
+    public async Task<List<Order>> GetOrders(int userId) => await _orderStore.GetAllOrdersAsync(userId, 0 , 0);
 
     //public async Task<bool> UpdateOrderPaymentStatus(Orders order) =>
     //    await _orderStore.UpdateOrderAsync(order);

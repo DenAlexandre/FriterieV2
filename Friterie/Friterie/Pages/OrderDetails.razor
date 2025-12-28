@@ -3,11 +3,11 @@
 @using Friterie.Context
 @using Friterie.Shared.Models
 @using static Friterie.Shared.Models.EnumFriterie
-@inject CartService CartService
+@inject CartServiceView CartService
 @inject NavigationManager Navigation
-@inject ApiService Api
+@inject ApiServiceView Api
 
-<h3>Commande @OrderContext.OrderId</h3>
+@* <h3>Commande @OrderContext.OrderId</h3> *@
 
 @if (CartService.Cart.Items == null)
 {
@@ -83,6 +83,20 @@ else
     private int SelectedProductId;
 
 
+    protected override async Task OnInitializedAsync()
+    {
+        // Si aucune commande active
+        if (OrderContext.OrderId == 0)
+        {
+            var order = await Api.CreateOrderAsync(OrderContext.UserId);
+
+            // OrderContext.OrderId = order.Id;
+
+            // Optionnel : charger le panier depuis l’API
+            // CartService.Cart = await Api.GetCartAsync(order.Id);
+        }
+    }
+
     protected override async Task OnParametersSetAsync()
     {
         // Charger la commande et les produits via API
@@ -105,5 +119,9 @@ else
     {
         // await Api.RemoveProductInOrderAsync(OrderContext.OrderId, productId);
         // Order = await Api.GetOrderAsync(OrderContext.OrderId);
+
+        if (SelectedProductId == 0) return;
+
+        Api.RemoveProductInOrderAsync(0, SelectedProductId);
     }
 }

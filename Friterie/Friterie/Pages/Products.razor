@@ -3,9 +3,11 @@
 @using Friterie.Context
 @using Friterie.Shared.Models
 @using static Friterie.Shared.Models.EnumFriterie
-@inject ApiService ApiService
-@inject CartService CartService
+@inject ApiServiceView ApiService
+@inject CartServiceView CartService
 @inject NavigationManager Navigation
+@inject AuthStateServiceView AuthStateService
+
 @implements IDisposable
 
 <PageTitle>Nos Produits - Friterie</PageTitle>
@@ -151,15 +153,24 @@
     private void GoToPanier()
     {
         // OrderContext.OrderId = OrderId;
-        
-        //Navigation.NavigateTo("/order-detail");
-        Navigation.NavigateTo("/cart");
+
+        Navigation.NavigateTo("/order-detail");
+        //Navigation.NavigateTo("/cart");
     }
 
 
-    private void AddToCart(Product product)
+    private async Task AddToCart(Product product)
     {
+        if (OrderContext.OrderId == 0)
+        {
+            var userId = await AuthStateService.GetUserIdAsync();
+            var orderId = await ApiService.CreateOrderAsync(userId);
+        }
 
+
+
+
+        // OrderContext.OrderId = OrderId;
         CartService.AddItem(product);
     }
 

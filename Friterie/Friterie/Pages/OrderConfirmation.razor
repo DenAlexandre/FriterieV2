@@ -1,7 +1,7 @@
 ﻿@page "/order-confirmation/{OrderId:int}"
  
 @using Friterie.BlazorServer.Services
-@inject ApiService ApiService
+@inject ApiServiceView ApiService
 @inject NavigationManager Navigation
 
 <PageTitle>Commande Confirmée - Friterie</PageTitle>
@@ -90,7 +90,7 @@
     [Parameter]
     public int OrderId { get; set; }
 
-    private Orders? order;
+    private Order? order;
 
     protected override async Task OnInitializedAsync()
     {

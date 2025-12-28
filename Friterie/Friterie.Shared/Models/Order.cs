@@ -2,7 +2,7 @@
 
 namespace Friterie.Shared.Models
 {
-    public class Orders
+    public class Order
     {
         public int OrderId { get; set; }
         public int OrderUserId { get; set; }

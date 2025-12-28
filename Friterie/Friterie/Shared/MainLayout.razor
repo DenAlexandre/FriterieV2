@@ -4,8 +4,8 @@
 @inherits LayoutComponentBase
 
 @inject AuthenticationStateProvider AuthProvider
-@* @inject AuthStateService AuthState *@
-@inject CartService CartService
+@inject AuthStateServiceView AuthStateService
+@inject CartServiceView CartService
 @inject NavigationManager Navigation
 
 <PageTitle>Friterie</PageTitle>
@@ -60,7 +60,7 @@
         var provider = (CustomAuthenticationStateProvider)AuthProvider;
         provider.SignOut();
 
-        // AuthState.Logout();
+        AuthStateService.Logout();
         CartService.Clear();
         Navigation.NavigateTo("/");
     }

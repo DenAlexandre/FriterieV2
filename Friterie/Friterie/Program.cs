@@ -1,17 +1,13 @@
 using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
-using Friterie.Authentication;
 using Friterie.BlazorServer.Services;
-using Friterie.Services;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Identity.Web;
 using MudBlazor.Services;
-using Serilog;
 using System.Net.Http.Headers;
 
 
@@ -34,14 +30,14 @@ builder.Services.AddServerSideBlazor();
 
 
 // Services applicatifs
-builder.Services.AddScoped<ApiService>();
-builder.Services.AddScoped<CartService>();
-builder.Services.AddScoped<AuthStateService>();
+builder.Services.AddScoped<ApiServiceView>();
+builder.Services.AddScoped<CartServiceView>();
+builder.Services.AddScoped<AuthStateServiceView>();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 //builder.Services.AddSingleton<UserServiceView>();
 //builder.Services.AddSingleton<UserAccountService>();
-builder.Services.AddSingleton<WeatherForecastService>();
+
 
 
 

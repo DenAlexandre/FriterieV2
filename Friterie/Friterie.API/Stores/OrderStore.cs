@@ -38,7 +38,7 @@
         // =======================
         // GET BY ID
         // =======================
-        public async Task<Orders?> GetByIdOrderAsync(int order_id)
+        public async Task<Order?> GetByIdOrderAsync(int order_id)
         {
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -51,7 +51,7 @@
             await using var reader = await cmd.ExecuteReaderAsync();
             if (!await reader.ReadAsync()) return null;
 
-            return new Orders
+            return new Order
             {
                 OrderId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
                 OrderUserId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
@@ -66,9 +66,9 @@
         // =======================
         // GET ALL (pagination)
         // =======================
-        public async Task<List<Orders>> GetAllOrdersAsync(int userId, int limit, int offset)
+        public async Task<List<Order>> GetAllOrdersAsync(int userId, int limit, int offset)
         {
-            var result = new List<Orders>();
+            var result = new List<Order>();
 
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -82,7 +82,7 @@
             await using var reader = await cmd.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
-                result.Add(new Orders
+                result.Add(new Order
                 {
                     OrderId = reader.IsDBNull(0) ? default : reader.GetInt32(0),
                     OrderUserId = reader.IsDBNull(1) ? default : reader.GetInt32(1),
@@ -100,7 +100,7 @@
         // =======================
         // INSERT
         // =======================
-        public async Task InsertOrderAsync(Orders entity)
+        public async Task InsertOrderAsync(Order entity)
         {
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();
@@ -121,7 +121,7 @@
         // =======================
         // UPDATE
         // =======================
-        public async Task<bool> UpdateOrderAsync(Orders entity)
+        public async Task<bool> UpdateOrderAsync(Order entity)
         {
             await using var conn = new NpgsqlConnection(_connectionString);
             await conn.OpenAsync();

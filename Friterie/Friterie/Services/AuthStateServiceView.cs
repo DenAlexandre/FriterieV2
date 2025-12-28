@@ -1,8 +1,10 @@
 ﻿using Friterie.Shared.Models;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Identity.Web;
 
 namespace Friterie.BlazorServer.Services;
 
-public class AuthStateService
+public class AuthStateServiceView
 {
     private string? _token;
     private User? _currentUser;
@@ -12,6 +14,28 @@ public class AuthStateService
     public bool IsAuthenticated => !string.IsNullOrEmpty(_token);
 
     public User? CurrentUser => _currentUser;
+
+
+    private readonly AuthenticationStateProvider _auth;
+
+    public AuthStateServiceView(AuthenticationStateProvider auth)
+    {
+        _auth = auth;
+    }
+
+    public async Task<int> GetUserIdAsync()
+    {
+        if (_currentUser != null)
+        {
+            return _currentUser.UserId;
+        }
+        return 0;
+    }
+
+
+
+
+
 
     public void Login(string token, User user)
     {

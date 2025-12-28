@@ -6,10 +6,10 @@ using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
-public class ApiService
+public class ApiServiceView
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly AuthStateService _authStateService;
+    private readonly AuthStateServiceView _authStateService;
 
 
     private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
@@ -18,13 +18,15 @@ public class ApiService
     private const string ADD_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/add-product";
     private const string ADD_ITEMS_IN_ORDER = "FriterieAPI/api/add-items-in-order";
 
+    
+    private const string ADD_ORDER = "FriterieAPI/api/add-order";
 
 
     private const string GET_PRODUCTS_BDD = "/FriterieAPI/api/products/GetProducts";
     private const string GET_PRODUCTS_BY_CATEGORY_BDD = "/FriterieAPI/api/products/category";
     private const string GET_PRODUCTS_BY_ID_BDD = "/FriterieAPI/api/products/";
 
-    public ApiService(IHttpClientFactory httpClientFactory, AuthStateService authStateService)
+    public ApiServiceView(IHttpClientFactory httpClientFactory, AuthStateServiceView authStateService)
     {
         _httpClientFactory = httpClientFactory;
         _authStateService = authStateService;
@@ -132,42 +134,42 @@ public class ApiService
 
 
 
-    public async Task<Orders?> CreateItemsInOrderAsync(List<OrderItem> items)
+    public async Task<Order?> CreateItemsInOrderAsync(List<OrderItem> items)
     {
         var client = CreateClient();
         var response = await client.PostAsJsonAsync(ADD_ITEMS_IN_ORDER, new { items });
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<Orders>();
+            return await response.Content.ReadFromJsonAsync<Order>();
         }
         return null;
     }
 
 
-    public async Task<Orders?> CreateOrderAsync(List<OrderItem> items)
+    public async Task<int?> CreateOrderAsync(int userId)
     {
         var client = CreateClient();
-        var response = await client.PostAsJsonAsync("FriterieAPI/api/orders", new { items });
+        var response = await client.PostAsJsonAsync("FriterieAPI/api/orders",userId);
 
         if (response.IsSuccessStatusCode)
         {
-            return await response.Content.ReadFromJsonAsync<Orders>();
+            return await response.Content.ReadFromJsonAsync<int>();
         }
         return null;
     }
 
-    public async Task<Orders?> GetOrderAsync(int orderId)
+    public async Task<Order?> GetOrderAsync(int orderId)
     {
         var client = CreateClient();
-        return await client.GetFromJsonAsync<Orders>($"FriterieAPI/api/orders/{orderId}");
+        return await client.GetFromJsonAsync<Order>($"FriterieAPI/api/orders/{orderId}");
     }
 
-    public async Task<List<Orders>> GetUserOrdersAsync()
+    public async Task<List<Order>> GetUserOrdersAsync()
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Orders>>("FriterieAPI/api/orders/user");
-        return orders ?? new List<Orders>();
+        var orders = await client.GetFromJsonAsync<List<Order>>("FriterieAPI/api/orders/user");
+        return orders ?? new List<Order>();
     }
     #endregion
 

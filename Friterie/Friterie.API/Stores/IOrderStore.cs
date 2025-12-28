@@ -9,15 +9,15 @@ namespace Friterie.API.Stores
 {
     public interface IOrderStore
     {
-        public  Task<Orders?> GetByIdOrderAsync(int order_id);
+        public  Task<Order?> GetByIdOrderAsync(int order_id);
 
-        public  Task<List<Orders>> GetAllOrdersAsync(int userid, int limit, int offset);
-
-
-        public  Task InsertOrderAsync(Orders entity);
+        public  Task<List<Order>> GetAllOrdersAsync(int userid, int limit, int offset);
 
 
-        public  Task<bool> UpdateOrderAsync(Orders entity);
+        public  Task InsertOrderAsync(Order entity);
+
+
+        public  Task<bool> UpdateOrderAsync(Order entity);
 
 
 
