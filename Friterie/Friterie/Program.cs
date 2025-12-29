@@ -2,6 +2,7 @@ using Blazorise;
 using Blazorise.Bootstrap5;
 using Blazorise.Icons.FontAwesome;
 using Friterie.BlazorServer.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
@@ -20,8 +21,21 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Ajouter l'authentification avec Microsoft Entra ID
-builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+//builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+//    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
+
+builder.Services
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";
+        options.AccessDeniedPath = "/forbidden";
+    });
+
+builder.Services.AddAuthorization();
+builder.Services.AddHttpContextAccessor();
+
+
 
 builder.Services.AddAuthorizationCore();
 

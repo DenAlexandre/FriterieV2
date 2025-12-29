@@ -109,6 +109,8 @@
 </div>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
 
     // [Parameter] public int OrderId { get; set; }
     public OrderContext OrderContext { get; set; } = new();
@@ -124,25 +126,34 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await Initialize(AuthStateService.CurrentUser);
+        // await Initialize(AuthStateService.CurrentUser);
+
+        if (!AuthStateService.IsAuthenticated)
+        {
+            return;
+        }
+
+        var userId = (int)AuthStateService.CurrentUser?.UserId;
+        var token = AuthStateService.GetToken();
+
+        await Initialize(userId);
         await LoadProducts();
 
         CartService.OnChange += StateHasChanged;
     }
 
-    private async Task Initialize(User user)
+    private async Task Initialize(int userId)
     {
         try
         {
-            OrderContext.UserId = user.UserId;
 
-            List<Order> orders = await ApiService.GetOrdersByUserIdAsync(OrderContext.UserId, (int)StatusTypeEnum.Créé);
+            List<Order> orders = await ApiService.GetOrdersByUserIdAsync(userId, (int)StatusTypeEnum.Créé);
             Order order = orders.FirstOrDefault(o => o.OrderStatus == (int)StatusTypeEnum.Créé);
 
             // Si aucune commande active
             if (order == null)
             {
-                int? orderId = await ApiService.CreateOrderAsync(OrderContext.UserId);
+                int? orderId = await ApiService.CreateOrderAsync(userId);
                 OrderContext.OrderId = orderId?? 0;
             }
             else

@@ -1,10 +1,14 @@
 ﻿@page "/login"
 @using Friterie.BlazorServer.Services
 @using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
 @inject ApiServiceView ApiService
 @inject AuthenticationStateProvider AuthProvider
 @inject AuthStateServiceView AuthStateService
 @inject NavigationManager Navigation
+@inject IHttpContextAccessor HttpContextAccessor
+@attribute [AllowAnonymous]
 
 <PageTitle>Connexion - Friterie</PageTitle>
 
@@ -61,27 +65,54 @@
 </div>
 
 @code {
+
+    string redirectionPage = "/products";
     private string email = "den.alexandre@gmail.com";
     private string password = "B@rionce";
     private string errorMessage = "";
     private bool isLoading = false;
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? Error { get; set; }
+
+    private string? ErrorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var user = (await AuthProvider.GetAuthenticationStateAsync()).User;
+        if (user.Identity?.IsAuthenticated == true)
+        {
+            Navigation.NavigateTo(redirectionPage, true);
+        }
+
+        if (Error == "1")
+            ErrorMessage = "Email ou mot de passe incorrect.";
+    }
 
     private async Task HandleLogin()
     {
         isLoading = true;
         errorMessage = "";
 
+
         try
         {
 
-
-            var response = await ApiService.LoginAsync(email, password);
-
-            if (response != null)
+            var user = (await AuthProvider.GetAuthenticationStateAsync()).User;
+            if (user.Identity?.IsAuthenticated == true)
             {
-                var provider = (CustomAuthenticationStateProvider)AuthProvider;
+                Navigation.NavigateTo(redirectionPage, true);
+            }
+            else
+            {
+                var response = await ApiService.LoginAsync(email, password);
 
-                var claims = new List<Claim>
+                if (response != null)
+                {
+                    var provider = (CustomAuthenticationStateProvider)AuthProvider;
+
+                    var claims = new List<Claim>
                 {
                     new Claim("UserId", response.User.UserId.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, response.User.UserId.ToString()),
@@ -89,21 +120,29 @@
                     new Claim(ClaimTypes.Email, response.User.Email),
                 };
 
-                claims.Add(new Claim(ClaimTypes.Role, response.User.RoleName));
+                    claims.Add(new Claim(ClaimTypes.Role, response.User.RoleName));
 
-                // foreach (var role in response.R)
-                // {
-                //     claims.Add(new Claim(ClaimTypes.Role, role));
-                // }
+                    provider.SignIn(response.User.FirstName, claims);
 
-                provider.SignIn(response.User.FirstName, claims);
-                AuthStateService.Login(response.Token, response.User);
 
-                Navigation.NavigateTo("/products");
-            }
-            else
-            {
-                errorMessage = "Email ou mot de passe incorrect";
+                    var identity = new ClaimsIdentity(
+                    claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                    var principal = new ClaimsPrincipal(identity);
+
+                    AuthStateService.Login(response.Token, response.User);
+
+        //             await HttpContextAccessor.HttpContext!.SignInAsync(
+        // CookieAuthenticationDefaults.AuthenticationScheme,
+        // principal);
+
+                    Navigation.NavigateTo(redirectionPage);
+                }
+                else
+                {
+                    errorMessage = "Email ou mot de passe incorrect";
+                }
             }
         }
         catch (Exception ex)

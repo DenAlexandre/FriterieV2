@@ -1,12 +1,14 @@
 ﻿namespace Friterie.API.Controllers;
 
+using Friterie.API.DTOs;
 using Friterie.API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using static Friterie.Shared.Models.EnumFriterie;
 
-[Authorize]
+//[Authorize]
 [ApiController]
 public class OrdersController : ControllerBase
 {
@@ -25,39 +27,27 @@ public class OrdersController : ControllerBase
         _orderService = orderService;
     }
 
+
+
     [HttpPost(ADD_ORDER)]
-    public IActionResult CreateOrder([FromBody] int UserID)
+    public async Task<IActionResult> CreateOrder([FromBody] int UserID)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null)
-            return Unauthorized();
 
-        var userId = int.Parse(userIdClaim);
-        var orderId = _orderService.CreateOrder(userId);
-
+        var orderId = _orderService.CreateOrder(UserID);
         return Ok(orderId);
     }
 
-    //[HttpGet("{id}")]
-    //public IActionResult GetOrder(int id)
-    //{
-    //    var order = _orderService.GetOrderById(id);
-    //    if (order == null)
-    //        return NotFound();
 
-    //    return Ok(order);
-    //}
+
 
     [HttpGet(GET_ORDER_BY_USER_ID)]
-    public IActionResult GetOrdersByUserId(int userId, int statusTypeEnum)
+    public async Task<IActionResult> GetOrdersByUserId(int userId, int statusTypeEnum)
     {
-        var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userIdClaim == null)
-            return Unauthorized();
-
-        var userId2 = int.Parse(userIdClaim);
-        var orders = _orderService.GetOrdersByUserId(userId2, statusTypeEnum);
+        var orders = _orderService.GetOrdersByUserId(userId, statusTypeEnum);
+        if (orders == null)
+            return NotFound();
 
         return Ok(orders);
     }
+
 }

@@ -6,6 +6,7 @@
 @inject CartServiceView CartService
 @inject NavigationManager Navigation
 @inject ApiServiceView Api
+@inject AuthStateServiceView AuthStateService
 
 @* <h3>Commande @OrderContext.OrderId</h3> *@
 
@@ -86,6 +87,16 @@ else
     protected override async Task OnInitializedAsync()
     {
         // Si aucune commande active
+        if (OrderContext == null)
+        {
+            OrderContext = new OrderContext
+            {
+                UserId = AuthStateService.CurrentUser.UserId,
+                OrderId = 0
+            };
+        }
+
+
         if (OrderContext.OrderId == 0)
         {
             var order = await Api.CreateOrderAsync(OrderContext.UserId);

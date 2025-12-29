@@ -1,0 +1,26 @@
+﻿@page "/forbidden"
+@using Friterie.Shared
+@layout MainLayout
+@attribute [AllowAnonymous]
+
+<div class="container mt-5">
+    <div class="alert alert-danger text-center">
+        <h3>⛔ Accès refusé</h3>
+
+        <p>
+            Vous n’avez pas les droits nécessaires pour accéder à cette page.
+        </p>
+
+        <hr />
+
+        <div class="d-flex justify-content-center gap-2">
+            <a class="btn btn-primary" href="/">
+                Accueil
+            </a>
+
+            <a class="btn btn-outline-secondary" href="/login">
+                Se connecter avec un autre compte
+            </a>
+        </div>
+    </div>
+</div>

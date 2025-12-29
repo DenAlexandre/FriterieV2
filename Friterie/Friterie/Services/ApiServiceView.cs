@@ -2,6 +2,7 @@
 
 
 using Friterie.Shared.Models;
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -12,10 +13,12 @@ public class ApiServiceView
     private readonly AuthStateServiceView _authStateService;
 
 
-    private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
+    //private const string GET_LOGIN_BDD = "FriterieAPI/api/auth/login";
+    //private const string REGISTER_BDD = "FriterieAPI/api/auth/register";
+
+    private const string GET_LOGIN = "FriterieAPI/api/auth/login";
+    private const string GET_LOGOUT = "FriterieAPI/api/auth/logout";
     private const string REGISTER_BDD = "FriterieAPI/api/auth/register";
-
-
 
 
     private const string REMOVE_PRODUCT_IN_ORDER = "FriterieAPI/api/orders/remove-product";
@@ -54,7 +57,7 @@ public class ApiServiceView
     {
         var client = CreateClient();
 
-        var response = await client.PostAsJsonAsync(GET_LOGIN_BDD, new { email, password });
+        var response = await client.PostAsJsonAsync(GET_LOGIN, new { email, password });
 
         if (response.IsSuccessStatusCode)
         {
@@ -80,7 +83,15 @@ public class ApiServiceView
     {
         var client = CreateClient();
 
-        var requestUri = $"{GET_PRODUCTS_BDD}" + $"?type={type}&limit={limit}&offset={offset}";
+        var query = new Dictionary<string, string?>
+        {
+            ["type"] = type.ToString(),
+            ["limit"] = limit.ToString(),
+            ["offset"] = offset.ToString()
+        };
+        var requestUri = QueryHelpers.AddQueryString(GET_PRODUCTS_BDD, query);
+
+        //var requestUri = $"{GET_PRODUCTS_BDD}" + $"?type={type}&limit={limit}&offset={offset}";
         var jsonResponse = await client.GetStringAsync(requestUri);
 
         var products = JsonConvert.DeserializeObject<List<Product>>(jsonResponse);
@@ -168,10 +179,18 @@ public class ApiServiceView
     //    return await client.GetFromJsonAsync<Order>($GET_ORDER_BY_USER_ID +  "/{orderId}");
     //}
 
-    public async Task<List<Order>> GetOrdersByUserIdAsync(int userId, int statusTypeEnum)
+    public async Task<List<Order>> GetOrdersByUserIdAsync(int userId, int statusType)
     {
         var client = CreateClient();
-        var orders = await client.GetFromJsonAsync<List<Order>>(GET_ORDER_BY_USER_ID + new { userId, statusTypeEnum });
+
+        var query = new Dictionary<string, string?>
+        {
+            ["p_user_id"] = userId.ToString(),
+            ["p_status_id"] = statusType.ToString()
+        };
+        var requestUri = QueryHelpers.AddQueryString(GET_PRODUCTS_BDD, query);
+
+        var orders = await client.GetFromJsonAsync<List<Order>>(requestUri);
         return orders ?? new List<Order>();
     }
     #endregion

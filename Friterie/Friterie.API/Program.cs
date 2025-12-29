@@ -1,6 +1,7 @@
 using Friterie.API.Services;
 using Friterie.API.Stores;
 using Friterie.BlazorServer.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Rewrite;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
+using System;
 using System.Text;
 
 
@@ -36,6 +38,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+
+
+
+
 builder.Services.AddAuthorization();
 
 // Enregistrement des services en Singleton (données en mémoire)
@@ -43,6 +49,7 @@ builder.Services.AddSingleton<DataService>();
 
 builder.Services.AddScoped<IUserStore, UserStore>();
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthStateService>();
 
 builder.Services.AddScoped<IProductStore, ProductStore>();
 builder.Services.AddScoped<ProductService>();
@@ -88,6 +95,18 @@ builder.Services.AddSwaggerGen(options =>
 
 });
 
+//Auth cookie
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/login";          // page de login
+        options.AccessDeniedPath = "/forbidden"; // page forbidden
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddAuthorization();
+
 
 var app = builder.Build();
 
@@ -118,10 +137,11 @@ if (app.Environment.IsDevelopment())
                              // app.UseMiddleware<JwtMiddleware>(); // JWT Middleware should be placed here
                              // app.UseAuthorization();
     app.UseAuthorization();
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllers();
-    });
+
+    //app.UseEndpoints(endpoints =>
+    //{
+    //    endpoints.MapControllers();
+    //});
 
 }
 
