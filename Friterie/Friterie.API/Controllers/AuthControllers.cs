@@ -13,16 +13,16 @@ using System.Threading.Tasks;
 public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
-    private readonly AuthStateService _authState;
+    //private readonly AuthStateService _authState;
 
     private const string GET_LOGIN = "FriterieAPI/api/auth/login";
     private const string GET_LOGOUT = "FriterieAPI/api/auth/logout";
     private const string REGISTER_BDD = "FriterieAPI/api/auth/register";
 
-    public AuthController(AuthService authService, AuthStateService authState)
+    public AuthController(AuthService authService)
     {
         _authService = authService;
-        _authState = authState;
+        //_authState = authState;
     }
 
 
@@ -70,32 +70,11 @@ public class AuthController : ControllerBase
             });
 
         // Stockage du token côté serveur (Scoped service)
-        _authState.SetUser(principal, token);
+        await _authService.Login(user.Email, token);
 
 
         if (user == null || token == null)
             return Unauthorized(new { message = "Email ou mot de passe incorrect" });
-
-        return Ok(new
-        {
-            token,
-            user = new User
-            {
-                UserId = user.UserId,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                PhoneNumber = user.PhoneNumber,
-                Address = user.Address,
-                RoleId = user.RoleId,
-                RoleName = user.RoleName
-            }
-        });
-
-
-
-
-
 
         return Ok(new { token, user });
     }
@@ -104,7 +83,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Logout()
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-        _authState.Clear();
+        _authService.Clear();
         return Ok();
     }
 }

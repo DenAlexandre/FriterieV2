@@ -20,25 +20,6 @@ public class OrderService
 
     public async Task<int> CreateOrder(int userId)
     {
-        //var order = new Order
-        //{
-        //    OrderUserId = userId,
-        //    //Items = items,
-        //    //OrderTotal = items.Sum(i => i.OiPrice * i.OiQuantity),
-        //    OrderDatetime = DateTime.UtcNow,
-        //    OrderStatus = (int)StatusTypeEnum.Créé,
-        //};
-
-        //// Réduire le stock
-        //foreach (var item in items)
-        //{
-
-
-
-        //    //TODO
-        //    //_orderService.UpdateOrderAsync(item.ProductId, item.Quantity);
-        //}
-
         return await _orderStore.InsertOrderAsync(userId);
     }
 

@@ -110,9 +110,6 @@
 
 @code {
     [CascadingParameter]
-    private Task<AuthenticationState> AuthenticationStateTask { get; set; } = default!;
-
-    // [Parameter] public int OrderId { get; set; }
     public OrderContext OrderContext { get; set; } = new();
 
     private List<Product> _products = new();
@@ -127,6 +124,11 @@
     protected override async Task OnInitializedAsync()
     {
         // await Initialize(AuthStateService.CurrentUser);
+
+        if (OrderContext == null)
+        {
+            OrderContext = new OrderContext();
+        }
 
         if (!AuthStateService.IsAuthenticated)
         {
@@ -153,8 +155,8 @@
             // Si aucune commande active
             if (order == null)
             {
-                int? orderId = await ApiService.CreateOrderAsync(userId);
-                OrderContext.OrderId = orderId?? 0;
+                OrderResponse orderResponse = await ApiService.CreateOrderAsync(userId);
+                OrderContext.OrderId = orderResponse.OrderId;
             }
             else
             {

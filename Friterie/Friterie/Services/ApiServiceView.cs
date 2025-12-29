@@ -2,6 +2,7 @@
 
 
 using Friterie.Shared.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
@@ -79,27 +80,41 @@ public class ApiServiceView
 
     // ============= PRODUCTS =============
 
+
     public async Task<List<Product>> GetProductsAsync(int type, int limit, int offset)
     {
         var client = CreateClient();
 
-        var query = new Dictionary<string, string?>
-        {
-            ["type"] = type.ToString(),
-            ["limit"] = limit.ToString(),
-            ["offset"] = offset.ToString()
-        };
-        var requestUri = QueryHelpers.AddQueryString(GET_PRODUCTS_BDD, query);
+        var url = GET_PRODUCTS_BDD + $"?type={type}&limit={limit}&offset={offset}";
 
-        //var requestUri = $"{GET_PRODUCTS_BDD}" + $"?type={type}&limit={limit}&offset={offset}";
-        var jsonResponse = await client.GetStringAsync(requestUri);
+        var response = await client.GetAsync(url);
 
-        var products = JsonConvert.DeserializeObject<List<Product>>(jsonResponse);
+        if (!response.IsSuccessStatusCode)
+            return new List<Product>();
 
-
-        //var products = await client.GetFromJsonAsync<List<Product>>(GET_PRODUCTS_BDD + "/"  + new { type, limit, offset });
-        return products ?? new List<Product>();
+        return await response.Content.ReadFromJsonAsync<List<Product>>()
+               ?? new List<Product>();
     }
+
+
+
+    //public async Task<List<Product>> GetProductsAsync(int type, int limit, int offset)
+    //{
+    //    var client = CreateClient();
+
+    //    var query = new Dictionary<string, string?>
+    //    {
+    //        ["type"] = type.ToString(),
+    //        ["limit"] = limit.ToString(),
+    //        ["offset"] = offset.ToString()
+    //    };
+    //    var requestUri = QueryHelpers.AddQueryString(GET_PRODUCTS_BDD, query);
+    //    var jsonResponse = await client.GetStringAsync(requestUri);
+
+    //    var products = JsonConvert.DeserializeObject<List<Product>>(jsonResponse);
+
+    //    return products ?? new List<Product>();
+    //}
 
     public async Task<List<Product>> GetProductsByCategoryAsync(string category)
     {
@@ -160,24 +175,24 @@ public class ApiServiceView
     }
 
 
-    public async Task<int?> CreateOrderAsync(int userId)
+    public async Task<OrderResponse?> CreateOrderAsync(int userId)
     {
         var client = CreateClient();
 
         var response = await client.PostAsJsonAsync(ADD_ORDER, new { userId });
 
-        if (response.IsSuccessStatusCode)
+        var query = new Dictionary<string, string?>
         {
-            return await response.Content.ReadFromJsonAsync<int>();
-        }
-        return null;
-    }
+            ["p_order_user_id"] = userId.ToString(),
+        };
+        var requestUri = QueryHelpers.AddQueryString(ADD_ORDER, query);
+        var jsonResponse = await client.GetStringAsync(requestUri);
 
-    //public async Task<Order?> GetOrderAsync(int orderId)
-    //{
-    //    var client = CreateClient();
-    //    return await client.GetFromJsonAsync<Order>($GET_ORDER_BY_USER_ID +  "/{orderId}");
-    //}
+        var rep = JsonConvert.DeserializeObject<OrderResponse>(jsonResponse);
+
+        return rep ?? new OrderResponse();
+
+    }
 
     public async Task<List<Order>> GetOrdersByUserIdAsync(int userId, int statusType)
     {
@@ -188,7 +203,7 @@ public class ApiServiceView
             ["p_user_id"] = userId.ToString(),
             ["p_status_id"] = statusType.ToString()
         };
-        var requestUri = QueryHelpers.AddQueryString(GET_PRODUCTS_BDD, query);
+        var requestUri = QueryHelpers.AddQueryString(GET_ORDER_BY_USER_ID, query);
 
         var orders = await client.GetFromJsonAsync<List<Order>>(requestUri);
         return orders ?? new List<Order>();
@@ -228,7 +243,11 @@ public class LoginResponse
     public string Token { get; set; } = string.Empty;
     public User User { get; set; } = new();
 }
+public class OrderResponse
+{
+    public int OrderId { get; set; } = 0;
 
+}
 
 public class RegisterRequest
 {

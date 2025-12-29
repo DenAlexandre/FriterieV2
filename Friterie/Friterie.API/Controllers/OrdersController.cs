@@ -30,18 +30,20 @@ public class OrdersController : ControllerBase
 
 
     [HttpPost(ADD_ORDER)]
-    public async Task<IActionResult> CreateOrder([FromBody] int UserID)
+    public async Task<IActionResult> CreateOrder([FromBody] int userId)
     {
+        if (userId <= 0)
+            return BadRequest("UserId invalide");
 
-        var orderId = _orderService.CreateOrder(UserID);
-        return Ok(orderId);
+        var orderId = _orderService.CreateOrder(userId);
+        return Ok(new { orderId });
     }
 
 
 
 
     [HttpGet(GET_ORDER_BY_USER_ID)]
-    public async Task<IActionResult> GetOrdersByUserId(int userId, int statusTypeEnum)
+    public async Task<IActionResult> GetOrdersByUserId([FromBody] int userId, int statusTypeEnum)
     {
         var orders = _orderService.GetOrdersByUserId(userId, statusTypeEnum);
         if (orders == null)

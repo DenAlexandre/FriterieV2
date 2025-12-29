@@ -16,10 +16,12 @@ public class AuthService
     private readonly DataService _dataService;
     private readonly IConfiguration _configuration;
     private readonly IUserStore _userStore;
+    public User? User { get; private set; }
+    public int? UserId { get; private set; } = 0;
+    public string Token { get; private set; } = String.Empty;
 
-    public AuthService(IUserStore userStore, DataService dataService, IConfiguration configuration)
+    public AuthService(IUserStore userStore, IConfiguration configuration)
     {
-        _dataService = dataService;
         _configuration = configuration;
         _userStore = userStore;
     }
@@ -52,6 +54,10 @@ public class AuthService
             return (null, null);
 
         var token = GenerateJwtToken(user);
+
+        User = user;
+        Token = token;
+        UserId = user.UserId;
         return (user, token);
     }
 
@@ -89,5 +95,13 @@ public class AuthService
     {
         var hashOfInput = HashPassword(password);
         return hashOfInput == hash;
+    }
+
+    public void Clear()
+    {
+        User = null;
+        Token = null;
+        UserId = null;
+
     }
 }

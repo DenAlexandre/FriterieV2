@@ -46,7 +46,7 @@ namespace Friterie.API.Stores
 
 
         //Task<List<Order>> GetOrdersByUserId(int userId, Stat v1, int v2);
-        Task<List<Order>> GetOrdersByUserId(int userId, int statusTypeEnum);
+        public Task<List<Order>> GetOrdersByUserId(int userId, int statusTypeEnum);
     }
 
 

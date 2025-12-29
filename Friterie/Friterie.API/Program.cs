@@ -4,6 +4,7 @@ using Friterie.BlazorServer.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,42 +24,20 @@ builder.Services.AddSwaggerGen();
 var jwtKey = builder.Configuration["Jwt:Key"];
 var key = Encoding.UTF8.GetBytes(jwtKey);
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(key)
-        };
-    });
-
-
-
-
-
-builder.Services.AddAuthorization();
-
-// Enregistrement des services en Singleton (données en mémoire)
-builder.Services.AddSingleton<DataService>();
-
-builder.Services.AddScoped<IUserStore, UserStore>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<AuthStateService>();
-
-builder.Services.AddScoped<IProductStore, ProductStore>();
-builder.Services.AddScoped<ProductService>();
-
-builder.Services.AddScoped<IOrderStore, OrderStore>();
-builder.Services.AddScoped<OrderService>();
-
-builder.Services.AddScoped<CartService>();
-builder.Services.AddScoped<PaymentService>();
+//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+//    .AddJwtBearer(options =>
+//    {
+//        options.TokenValidationParameters = new TokenValidationParameters
+//        {
+//            ValidateIssuer = true,
+//            ValidateAudience = true,
+//            ValidateLifetime = true,
+//            ValidateIssuerSigningKey = true,
+//            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+//            ValidAudience = builder.Configuration["Jwt:Audience"],
+//            IssuerSigningKey = new SymmetricSecurityKey(key)
+//        };
+//    });
 
 
 // CORS
@@ -103,9 +82,32 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.AccessDeniedPath = "/forbidden"; // page forbidden
         options.ExpireTimeSpan = TimeSpan.FromHours(8);
         options.SlidingExpiration = true;
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SameSite = SameSiteMode.Lax;
     });
 
+
+
 builder.Services.AddAuthorization();
+
+// Enregistrement des services en Singleton (données en mémoire)
+builder.Services.AddSingleton<DataService>();
+
+builder.Services.AddScoped<IUserStore, UserStore>();
+builder.Services.AddScoped<AuthService>();
+//builder.Services.AddScoped<AuthStateService>();
+
+builder.Services.AddScoped<IProductStore, ProductStore>();
+builder.Services.AddScoped<ProductService>();
+
+builder.Services.AddScoped<IOrderStore, OrderStore>();
+builder.Services.AddScoped<OrderService>();
+
+builder.Services.AddScoped<CartService>();
+builder.Services.AddScoped<PaymentService>();
+
+
+
 
 
 var app = builder.Build();
@@ -137,6 +139,7 @@ if (app.Environment.IsDevelopment())
                              // app.UseMiddleware<JwtMiddleware>(); // JWT Middleware should be placed here
                              // app.UseAuthorization();
     app.UseAuthorization();
+    app.MapControllers();
 
     //app.UseEndpoints(endpoints =>
     //{

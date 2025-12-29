@@ -25,12 +25,7 @@ builder.Services.AddRazorComponents()
 //    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAd"));
 
 builder.Services
-    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.LoginPath = "/login";
-        options.AccessDeniedPath = "/forbidden";
-    });
+    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme);
 
 builder.Services.AddAuthorization();
 builder.Services.AddHttpContextAccessor();
@@ -49,14 +44,6 @@ builder.Services.AddScoped<CartServiceView>();
 builder.Services.AddScoped<AuthStateServiceView>();
 builder.Services.AddScoped<ProtectedSessionStorage>();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-//builder.Services.AddSingleton<UserServiceView>();
-//builder.Services.AddSingleton<UserAccountService>();
-
-
-
-
-
-
 
 
 builder.Services.AddMudServices();

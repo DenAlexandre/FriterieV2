@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @using Friterie.BlazorServer.Services
 @using System.Security.Claims
+@using Friterie.Context
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
 @inject ApiServiceView ApiService
@@ -76,6 +77,9 @@
     [SupplyParameterFromQuery]
     public string? Error { get; set; }
 
+
+    public OrderContext OrderContext { get; set; } = new();
+
     private string? ErrorMessage;
 
     protected override async Task OnInitializedAsync()
@@ -133,9 +137,8 @@
 
                     AuthStateService.Login(response.Token, response.User);
 
-        //             await HttpContextAccessor.HttpContext!.SignInAsync(
-        // CookieAuthenticationDefaults.AuthenticationScheme,
-        // principal);
+                    OrderContext.OrderId  = 0;
+                    OrderContext.UserId = response.User.UserId;
 
                     Navigation.NavigateTo(redirectionPage);
                 }
